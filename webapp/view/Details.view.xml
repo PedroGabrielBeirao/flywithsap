@@ -1,0 +1,11 @@
+<mvc:View xmlns:core="sap.ui.core" 
+xmlns:mvc="sap.ui.core.mvc" 
+xmlns="sap.m" 
+controllerName="pt.procensus.FlyWithSapApp.controller.Details"
+>
+			<Page title="Title">
+				<content>
+					<Text text="HELLO TESTE" />
+				</content>
+			</Page>
+</mvc:View>

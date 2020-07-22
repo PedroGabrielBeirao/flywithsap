@@ -1,0 +1,11 @@
+<mvc:View	
+			controllerName="pt.procensus.FlyWithSapApp.controller.App" 
+			xmlns:mvc="sap.ui.core.mvc" 
+			xmlns="sap.m"
+			displayBlock="true" >
+	
+<Shell>
+		<App id="app">
+		</App>
+	</Shell>
+</mvc:View>

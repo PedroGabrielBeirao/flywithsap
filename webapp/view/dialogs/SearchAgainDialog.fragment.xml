@@ -1,0 +1,28 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core" >
+   <Dialog
+      id="searchAgainDialog"
+      title="{i18n>searchAgainDialogTitle}"
+      type="Message">
+ 
+	<content>
+   		<Text text="{i18n>searchAgainText}" textAlign="Begin"/>
+   	</content>
+   	
+   		<buttons>
+   		  <Button
+            text="{i18n>searchButton}"
+            press="onConfirmationRefresh"
+            type="Accept"
+            />
+            
+         <Button
+            text="{i18n>cancelButton}"
+            press="onCloseDialog"
+            type="Reject"
+            />
+		</buttons>
+	
+   </Dialog>
+</core:FragmentDefinition>

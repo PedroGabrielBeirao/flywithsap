@@ -1,0 +1,56 @@
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+	xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZAPP_FLIGHTS_SRV_01" xml:lang="en" sap:schema-version="1">
+			<EntityType Name="Cliente" sap:content-version="1">
+				<Key><PropertyRef Name="Codigo"/></Key><Property Name="Codigo" Type="Edm.String" Nullable="false" MaxLength="8"/><Property Name="Nome" Type="Edm.String" Nullable="false" MaxLength="25" sap:filterable="false"/><Property Name="Morada" Type="Edm.String" Nullable="false" MaxLength="30" sap:sortable="false" sap:filterable="false"/><Property Name="Telefone" Type="Edm.String" Nullable="false" MaxLength="30" sap:sortable="false" sap:filterable="false"/><Property Name="Idioma" Type="Edm.String" Nullable="false" MaxLength="2" sap:sortable="false" sap:filterable="false"/><Property Name="Email" Type="Edm.String" Nullable="false" MaxLength="40" sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Conexao" sap:content-version="1">
+				<Key><PropertyRef Name="CompanhiaAerea"/><PropertyRef Name="NumeroConexao"/></Key><Property Name="CompanhiaAerea" Type="Edm.String" Nullable="false" MaxLength="3" sap:creatable="false" sap:updatable="false"/><Property Name="NumeroConexao" Type="Edm.String" Nullable="false" MaxLength="4" sap:creatable="false" sap:updatable="false"/><Property Name="CidadeOrigem" Type="Edm.String" Nullable="false" MaxLength="20" sap:creatable="false" sap:updatable="false"/><Property Name="AeroportoOrigem" Type="Edm.String" Nullable="false" MaxLength="3" sap:creatable="false" sap:updatable="false"/><Property Name="CidadeDestino" Type="Edm.String" Nullable="false" MaxLength="20" sap:creatable="false" sap:updatable="false"/><Property Name="AeroportoDestino" Type="Edm.String" Nullable="false" MaxLength="3" sap:creatable="false" sap:updatable="false"/><Property Name="HorarioPartida" Type="Edm.Time" Nullable="false" Precision="0" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="HorarioChegada" Type="Edm.Time" Nullable="false" Precision="0" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="DiasApos" Type="Edm.Byte" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><NavigationProperty Name="ConexaoVooNav" Relationship="ZAPP_FLIGHTS_SRV_01.ConexaoVoo" FromRole="FromRole_ConexaoVoo"
+					ToRole="ToRole_ConexaoVoo"/></EntityType>
+			<EntityType Name="Reserva" sap:content-version="1">
+				<Key><PropertyRef Name="CompanhiaAerea"/><PropertyRef Name="NumeroConexao"/><PropertyRef Name="DataVoo"/><PropertyRef Name="NumeroReserva"/></Key><Property Name="CompanhiaAerea" Type="Edm.String" Nullable="false" MaxLength="3" sap:updatable="false"/><Property Name="NumeroConexao" Type="Edm.String" Nullable="false" MaxLength="4" sap:updatable="false"/><Property Name="DataVoo" Type="Edm.DateTime" Nullable="false" Precision="7" sap:updatable="false"/><Property Name="NumeroReserva" Type="Edm.String" Nullable="false" MaxLength="8" sap:updatable="false"/><Property Name="CodigoCliente" Type="Edm.String" Nullable="false" MaxLength="8"/><Property Name="ClasseVoo" Type="Edm.String" Nullable="false" MaxLength="1"/><Property Name="ValorPago" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:sortable="false" sap:filterable="false"/><Property Name="Moeda" Type="Edm.String" Nullable="false" MaxLength="5" sap:filterable="false" sap:semantics="currency-code"/></EntityType>
+			<EntityType Name="Voo" sap:content-version="1">
+				<Key><PropertyRef Name="CompanhiaAerea"/><PropertyRef Name="NumeroConexao"/><PropertyRef Name="DataVoo"/></Key><Property Name="CompanhiaAerea" Type="Edm.String" Nullable="false" MaxLength="3" sap:creatable="false" sap:updatable="false"/><Property Name="NumeroConexao" Type="Edm.String" Nullable="false" MaxLength="4" sap:creatable="false" sap:updatable="false"/><Property Name="DataVoo" Type="Edm.DateTime" Nullable="false" Precision="7" sap:creatable="false" sap:updatable="false"/><Property Name="PrecoVoo" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:creatable="false" sap:updatable="false"
+					sap:filterable="false"/><Property Name="Moeda" Type="Edm.String" Nullable="false" MaxLength="5" sap:creatable="false" sap:updatable="false"
+					sap:semantics="currency-code"/><Property Name="TotalLugaresEcon" Type="Edm.Int32" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="LugaresOcupadosEcon" Type="Edm.Int32" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="Total" Type="Edm.Decimal" Nullable="false" Precision="18" Scale="3" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="TotalLugaresBus" Type="Edm.Int32" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="LugaresOcupadosBus" Type="Edm.Int32" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="TotalLugares1aClass" Type="Edm.Int32" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="LugaresOcupados1aClass" Type="Edm.Int32" Nullable="false" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><NavigationProperty Name="VooReservaNav" Relationship="ZAPP_FLIGHTS_SRV_01.VooReserva" FromRole="FromRole_VooReserva"
+					ToRole="ToRole_VooReserva"/></EntityType>
+			<EntityType Name="Classe" sap:content-version="1">
+				<Key><PropertyRef Name="ClasseVoo"/><PropertyRef Name="Idioma"/></Key><Property Name="ClasseVoo" Type="Edm.String" Nullable="false" MaxLength="1" sap:creatable="false" sap:updatable="false"/><Property Name="Idioma" Type="Edm.String" Nullable="false" MaxLength="2" sap:creatable="false" sap:updatable="false"/><Property Name="Descricao" Type="Edm.String" Nullable="false" MaxLength="60" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="Cidade" sap:content-version="1">
+				<Key><PropertyRef Name="NomeCidade"/><PropertyRef Name="Pais"/></Key><Property Name="NomeCidade" Type="Edm.String" Nullable="false" MaxLength="20" sap:creatable="false" sap:updatable="false"/><Property Name="Pais" Type="Edm.String" Nullable="false" MaxLength="3" sap:creatable="false" sap:updatable="false"/><Property Name="Descricao" Type="Edm.String" Nullable="false" MaxLength="15" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<Association Name="ConexaoVoo" sap:content-version="1"><End Type="ZAPP_FLIGHTS_SRV_01.Conexao" Multiplicity="1" Role="FromRole_ConexaoVoo"/><End Type="ZAPP_FLIGHTS_SRV_01.Voo" Multiplicity="*" Role="ToRole_ConexaoVoo"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_ConexaoVoo"><PropertyRef Name="CompanhiaAerea"/><PropertyRef Name="NumeroConexao"/></Principal>
+					<Dependent Role="ToRole_ConexaoVoo"><PropertyRef Name="CompanhiaAerea"/><PropertyRef Name="NumeroConexao"/></Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="VooReserva" sap:content-version="1"><End Type="ZAPP_FLIGHTS_SRV_01.Voo" Multiplicity="1" Role="FromRole_VooReserva"/><End Type="ZAPP_FLIGHTS_SRV_01.Reserva" Multiplicity="*" Role="ToRole_VooReserva"/>
+				<ReferentialConstraint>
+					<Principal Role="FromRole_VooReserva"><PropertyRef Name="CompanhiaAerea"/><PropertyRef Name="NumeroConexao"/><PropertyRef Name="DataVoo"/></Principal>
+					<Dependent Role="ToRole_VooReserva"><PropertyRef Name="CompanhiaAerea"/><PropertyRef Name="NumeroConexao"/><PropertyRef Name="DataVoo"/></Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityContainer Name="ZAPP_FLIGHTS_SRV_01_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx"><EntitySet Name="ClienteSet" EntityType="ZAPP_FLIGHTS_SRV_01.Cliente" sap:pageable="false" sap:content-version="1"/><EntitySet Name="ConexaoSet" EntityType="ZAPP_FLIGHTS_SRV_01.Conexao" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:content-version="1"/><EntitySet Name="ReservaSet" EntityType="ZAPP_FLIGHTS_SRV_01.Reserva" sap:pageable="false" sap:content-version="1"/><EntitySet Name="VooSet" EntityType="ZAPP_FLIGHTS_SRV_01.Voo" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:content-version="1"/><EntitySet Name="ClasseSet" EntityType="ZAPP_FLIGHTS_SRV_01.Classe" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="CidadeSet" EntityType="ZAPP_FLIGHTS_SRV_01.Cidade" sap:creatable="false" sap:updatable="false" sap:deletable="false"
+				sap:pageable="false" sap:content-version="1"/>
+				<AssociationSet Name="VooReservaSet" Association="ZAPP_FLIGHTS_SRV_01.VooReserva" sap:creatable="false" sap:updatable="false"
+					sap:deletable="false" sap:content-version="1"><End EntitySet="VooSet" Role="FromRole_VooReserva"/><End EntitySet="ReservaSet" Role="ToRole_VooReserva"/></AssociationSet>
+				<AssociationSet Name="ConexaoVooSet" Association="ZAPP_FLIGHTS_SRV_01.ConexaoVoo" sap:creatable="false" sap:updatable="false"
+					sap:deletable="false" sap:content-version="1"><End EntitySet="ConexaoSet" Role="FromRole_ConexaoVoo"/><End EntitySet="VooSet" Role="ToRole_ConexaoVoo"/></AssociationSet>
+			</EntityContainer><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="./sap/ZAPP_FLIGHTS_SRV/$metadata"/><atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="./sap/ZAPP_FLIGHTS_SRV/$metadata"/></Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

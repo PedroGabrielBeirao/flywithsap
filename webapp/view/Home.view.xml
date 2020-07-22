@@ -1,0 +1,14 @@
+<mvc:View controllerName="pt.procensus.FlyWithSapApp.controller.App" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml"
+	displayBlock="true" xmlns="sap.m">
+	<Shell>
+		<App id="idAppControl">
+			<pages>
+				<Page title="Fly with SAP!">
+					<content>
+						<mvc:XMLView viewName="pt.procensus.FlyWithSapApp.view.FlightSearch"/>
+					</content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

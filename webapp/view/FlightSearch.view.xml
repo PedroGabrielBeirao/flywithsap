@@ -1,0 +1,61 @@
+<mvc:View xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	controllerName="pt.procensus.FlyWithSapApp.controller.FlightSearch">
+	 
+	 <Image src="images/googleVoos.svg" width="100%" tooltip="{i18>googleVoosDescription}"/>
+
+<!--PANEL - CUSTOMER SEARCH INPUT PANEL-->
+	<Panel id="searchPanel" backgroundDesign="Transparent">
+		<headerToolbar>
+					<Toolbar >
+						<Title level="H2" text="{i18n>panelTitle}" class="sapUiTinyMargin" />
+					</Toolbar>
+		</headerToolbar>
+<!--CUSTOMER INPUT BOX -->
+	<HBox id="inputBox" alignItems="Start" width="auto" justifyContent="Center" class="sapUiTinyMargin" backgroundDesign="Transparent">
+		<items>
+				<ComboBox id="originInput" 
+						placeholder="{i18n>originPlaceholder}"
+						width="auto"
+						items="{
+							path: '/CidadeSet'
+						}">
+						<core:Item key="{NomeCidade}" text="{NomeCidade}"/> 
+				</ComboBox>
+				<Button id="switchInputs" tooltip="Switch" icon="sap-icon://repost" type="Transparent"/>
+				<ComboBox id="destinationInput" 
+						placeholder="{i18n>destinationPlaceholder}" 
+						width="auto"
+						class="sapUiTinyMarginEnd"
+						items="{
+							path: '/CidadeSet'
+						}">
+						<core:Item key="{NomeCidade}" text="{NomeCidade}"/> 
+				</ComboBox>
+				<DatePicker id="dateInput"/>
+				<!-- "C" equals Business Class -->
+				<Select id="typeInput"   
+						forceSelection="false"
+						selectedKey="C"  
+						width="auto"
+						class="sapUiTinyMarginBegin"
+						items="{
+							path:'/ClasseSet'
+						}">
+						<core:Item key ="{ClasseVoo}" text="{Descricao}"/>
+				</Select>
+		</items>
+	</HBox>
+	<!--SEARCH BUTTON BOX -->
+	<HBox id="searchBox" alignItems="Start" width="auto" justifyContent="Center" class="sapUiTinyMargin" backgroundDesign="Transparent" alignContent="Center">
+			<items>
+				<Button id="searchButton" press=".onSearch" text="{i18n>searchFlightButton}" icon="sap-icon://flight" type="Emphasized" width="150px"/>
+			</items>
+		</HBox>
+	</Panel>
+	<!--TABLE PANEL -->
+	<Panel id= "LazyLoadingTable" visible ="false" backgroundDesign="Transparent">
+		<core:Fragment fragmentName="pt.procensus.FlyWithSapApp.view.DisplayTable" type="XML" /> 
+	</Panel>
+</mvc:View>

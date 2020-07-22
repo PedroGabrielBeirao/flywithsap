@@ -1,0 +1,85 @@
+<core:FragmentDefinition 
+xmlns="sap.m" 
+xmlns:core="sap.ui.core" 
+>
+<!-- VOOSET TABLE -->
+	<Table id="flightsTable" 
+			width="auto" 
+			class="sapUiResponsiveMargin"
+			growing="true"
+			growingThreshold="8"
+			growingScrollToLoad="true"
+			items="{
+					path:'' 
+			}"
+	>
+			<headerToolbar>
+				<OverflowToolbar>
+						<Title id="tableHeader" 
+							text="{i18n>flightTableTitle}" 
+							width="auto" 
+							textAlign="Begin" 
+							class="sapUiTinyMargin" 
+							level="H3"/>
+				</OverflowToolbar>
+			</headerToolbar>
+			<columns>
+				<Column id="columnCompanyName" >
+					<Text id="company" text="{i18n>flightCompanyName}" />
+				</Column>
+				<Column id="columnDeparture" >
+					<Text id="departure" text="{i18n>flightDeparture}" />
+				</Column>
+				<Column id="columnArrival" >
+					<Text id="arrival" text="{i18n>flightArrival}" />
+				</Column>
+				<Column id="columnPrice" >
+					<Text id="price" text="{i18n>flightPrice}" />
+				</Column>
+				<Column id="columnCurrency" >
+					<Text id="currency" text="{i18n>flightCurrency}" />
+				</Column>
+				<Column id="columnSeats" >
+					<Text id="seatsAvailable" text="{i18n>flightSeats}" />
+				</Column>
+			</columns> 
+			<items>
+					<ColumnListItem type="Navigation" id="colunas" press="onSelect">
+						<cells>
+							<ObjectIdentifier title="{CompanhiaAerea}" titleActive="false" visible="true"/>
+							<ObjectIdentifier
+								text="{path: 'HorarioPartida', 
+										type: 'sap.ui.model.odata.type.Time', 
+										formatOptions: { UTC: true, style: 'medium' }}" />
+							<ObjectIdentifier
+								title="{path: 'HorarioChegada', 
+										type: 'sap.ui.model.odata.type.Time', 
+										formatOptions: { UTC: true, style: 'medium' }}"
+								text="{	path: 'DiasApos', 
+										formatter:'.formatter.calcDays' 
+									} "/>
+							<ObjectNumber 
+								number="{path: 'PrecoVoo', 
+									type: 'sap.ui.model.type.Float', 
+									formatOptions: { maxFractionDigits: 2, style:'medium' }}"
+								 />
+							<ObjectIdentifier 
+								 text="{Moeda}" />
+					<!--ObjectNumber Injected via the controller - index 5-->
+						</cells>
+					</ColumnListItem>
+				</items>
+		</Table>
+ <!-- CUSTOMER CHOICE - BUTTONS -->
+			<Toolbar id="tableFooter" design="Transparent" width="auto"  class="sapUiTinyMargin" >
+				<ToolbarSpacer width=""/>
+				<Button id="continueButton" text="Continue" type="Emphasized"  width="auto" enabled="false" visible="true" />
+				<Button id="searchAgainButton" 
+						press=".onOpenDialog"
+						text="Search Again" 
+						type="Reject" icon="sap-icon://refresh"
+						iconFirst="true" width="auto" enabled="true" visible="true"/>
+			</Toolbar>
+
+
+</core:FragmentDefinition> 
