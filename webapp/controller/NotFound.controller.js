@@ -3,13 +3,12 @@ sap.ui.define([
 ], function (BaseController) {
 	"use strict";
 
-	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.Details", {
+	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.NotFound", {
 
 		onInit: function () {
 
 		}
-
-
 	});
 
 });
+

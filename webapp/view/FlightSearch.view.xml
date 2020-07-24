@@ -18,22 +18,24 @@
 				<ComboBox id="originInput" 
 						placeholder="{i18n>originPlaceholder}"
 						width="auto"
+						value="NEW YORK"
 						items="{
 							path: '/CidadeSet'
 						}">
 						<core:Item key="{NomeCidade}" text="{NomeCidade}"/> 
 				</ComboBox>
-				<Button id="switchInputs" tooltip="Switch" icon="sap-icon://repost" type="Transparent"/>
+				<Button id="switchInputs" tooltip="Switch" icon="sap-icon://repost" type="Transparent" press=".onSwitch"/>
 				<ComboBox id="destinationInput" 
 						placeholder="{i18n>destinationPlaceholder}" 
 						width="auto"
 						class="sapUiTinyMarginEnd"
+						value="SAN FRANCISCO"
 						items="{
 							path: '/CidadeSet'
 						}">
 						<core:Item key="{NomeCidade}" text="{NomeCidade}"/> 
 				</ComboBox>
-				<DatePicker id="dateInput"/>
+				<DatePicker id="dateInput" value="01,16,2020"/>
 				<!-- "C" equals Business Class -->
 				<Select id="typeInput"   
 						forceSelection="false"

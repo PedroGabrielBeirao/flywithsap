@@ -92,7 +92,11 @@
 				"async": true,
 				"viewPath": "pt.procensus.FlyWithSapApp.view",
 				"controlAggregation": "pages",
-				"controlId": "app"
+				"controlId": "app",
+				"transition":"slide",
+				"bypassed": {
+					"target": "notFound"
+				}
 			},
 			"routes": [
 				{
@@ -100,25 +104,37 @@
 					"pattern": "",
 					"target": "home"
 				},
-			{
-			"pattern": "details",
-			"name": "details",
-			"target": "details"
-		}
+				{
+					"pattern": "details",
+					"name": "details",
+					"target": "details"
+				}
 			],
 			"targets": {
 				"home": {
 					"viewType": "XML",
 					"transition": "slide",
 					"viewId": "home",
-					"viewName": "Home"
+					"viewName": "Home",
+					"viewLevel": 1
 				},
 				"details": {
 					"viewType": "XML",
-					"viewId":"details",
-					"viewName": "Details"
+					"viewId": "details",
+					"viewName": "Details",
+					"viewLevel": 2
+				},
+				"notFound": {
+					"viewId": "notFound",
+					"viewName": "NotFound",
+					"transition": "show",
+					"viewLevel": 3
 				}
 			}
 		}
+	},
+	"sap.platform.hcp": {
+		"uri": "webapp",
+		"_version": "1.1.0"
 	}
 }

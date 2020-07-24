@@ -1,9 +1,9 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function (Controller) {
+	"pt/procensus/FlyWithSapApp/controller/BaseController"
+], function (BaseController) {
 	"use strict";
 
-	return Controller.extend("pt.procensus.FlyWithSapApp.controller.App", {
+	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.App", {
 		onInit: function () {
 				
 		}

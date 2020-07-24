@@ -1,23 +1,24 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
+	"pt/procensus/FlyWithSapApp/controller/BaseController",
 	"../model/formatter",
 	"sap/ui/core/library",
 	"sap/ui/core/Fragment",
 	"sap/ui/core/UIComponent"
-], function (Controller, formatter, coreLibrary, Fragment, UIComponent) {
+], function (BaseController, formatter, coreLibrary, Fragment, UIComponent) {
 	"use strict";
 
 	/* @Global
 	 * Just For Simplification */
 	var ValueState = coreLibrary.ValueState;
 
-	return Controller.extend("pt.procensus.FlyWithSapApp.controller.FlightSearch", {
+	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.FlightSearch", {
 
 		formatter: formatter,
 
 		onInit: function () {
 			// Get  Model and set it to view
 			var oModel = this.getOwnerComponent().getModel();
+			oModel.setSizeLimit(1000000000);
 			var oView = this.getView();
 			oView.setModel(oModel);
 
@@ -161,6 +162,14 @@ sap.ui.define([
 		onSelect: function (oEvent) {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("details");
+		},
+		
+		onSwitch: function () {
+			this._oView = this.getView();
+			var oOrigin = this._oView.byId("originInput").getValue();
+			var oDestiny = this._oView.byId("destinationInput").getValue();
+			this._oView.byId("originInput").setValue(oDestiny);
+			this._oView.byId("destinationInput").setValue(oOrigin);
 		}
 			
 	});
