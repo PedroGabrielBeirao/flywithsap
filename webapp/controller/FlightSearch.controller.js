@@ -1,15 +1,10 @@
 sap.ui.define([
 	"pt/procensus/FlyWithSapApp/controller/BaseController",
 	"../model/formatter",
-	"sap/ui/core/library",
 	"sap/ui/core/Fragment",
 	"sap/ui/core/UIComponent"
-], function (BaseController, formatter, coreLibrary, Fragment, UIComponent) {
+], function (BaseController, formatter, Fragment, UIComponent) {
 	"use strict";
-
-	/* @Global
-	 * Just For Simplification */
-	var ValueState = coreLibrary.ValueState;
 
 	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.FlightSearch", {
 
@@ -58,9 +53,7 @@ sap.ui.define([
 					}, {
 						path: aPaths[1]
 					}],
-					formatter: function (iTotalLugares, iLugaresOcupados) {
-						return (iTotalLugares - iLugaresOcupados);
-					}
+					formatter: this.formatter.calcSeats                         
 				},
 				state: {
 					parts: [{
@@ -68,17 +61,9 @@ sap.ui.define([
 					}, {
 						path: aPaths[1]
 					}],
-					formatter: function (iTotalLugares, iLugaresOcupados) {
-						var iAvailableSeats = (iTotalLugares - iLugaresOcupados);
-						if (iAvailableSeats >= 20)
-							return ValueState.Success;
-						else if (iAvailableSeats < 20 && iAvailableSeats > 10)
-							return ValueState.Warning;
-						return ValueState.Error;
-					}
+					formatter: this.formatter.availableSeatsStatus
 				}
 			}), 5); // cell index 
-
 			//  Binding is done only when the button is pressed, at initialization items="" at table
 			oTable.bindItems({
 				path: "/VooSet",
@@ -121,26 +106,7 @@ sap.ui.define([
 			this._oSearchPanel.setVisible(false);
 		},
 		
-		/*SEARCH AGAIN DIALOG EVENT HANDLERS */
-		_getDialog : function() {
-			//if the fragment doesnt exist yet it is instantiated, dependent to be connected to the view lifecycle
-			if(!this._oDialog) {
-				//the this parameter in xmlfragment references the controller to the xmlfragment it could be other
-				this._oDialog = sap.ui.xmlfragment( "pt.procensus.FlyWithSapApp.view.dialogs.SearchAgainDialog",this);
-				this.getView().addDependent(this._oDialog);
-			}
-			return this._oDialog;
-			
-		},
-		
-		onOpenDialog : function() {
-			this._getDialog().open();
-		},
-		
-		onCloseDialog : function() {
-			this._getDialog().close();
-		},
-		
+	
 		onConfirmationRefresh : function() {
 			this._oTablePanel = this.byId("LazyLoadingTable");
 			this._oTablePanel.setVisible(false);
@@ -148,7 +114,6 @@ sap.ui.define([
 			this._oSearchPanel.setVisible(true);
 			this._resetInputs();
 			this._getDialog().close();
-			
 		},
 		
 		_resetInputs : function(){
