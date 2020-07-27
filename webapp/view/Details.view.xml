@@ -20,7 +20,7 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 				isObjectIconAlwaysVisible="false"
 				objectTitle="FlightID"
 				isObjectTitleAlwaysVisible="false"
-				objectSubtitle="codigo do aviao" 
+				objectSubtitle="{CompanhiaAerea}" 
 				isObjectSubtitleAlwaysVisible="false"
 				isActionAreaAlwaysVisible="true"
 				>
@@ -53,7 +53,7 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 									</VBox>
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
-											<Title text="12/15/2020" textAlign="Begin" class="sapUiSmallMargin"/>
+											<Title text="{DataVoo}" textAlign="Begin" class="sapUiSmallMargin"/>
 										</items>
 									</VBox>
 								</items>

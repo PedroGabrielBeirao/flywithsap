@@ -39,6 +39,30 @@ sap.ui.define([
 		},
 		onCloseDialog : function() {
 			this._getDialog().close();
+		},
+		
+		onSelect : function(oEvent) {
+			// also possible: 
+			// var oRouter = this.getOwnerComponent().getRouterFor(this);
+		
+			 var oRouter = sap.ui.core.UIComponent.getRouterFor(this); 
+			 
+			 var oItem = oEvent.getSource();
+			 var oContext = oItem.getBindingContext();
+			 
+			 var CompanhiaAerea = oItem.getBindingContext().getProperty("CompanhiaAerea"); //AA
+			 var NumeroConexao = oItem.getBindingContext().getProperty("NumeroConexao"); // 0017
+			 
+			 //auiliar para ir buscar a dataVoo
+			 var aPath = oContext.sPath.split(",");
+			 var aDatePath = aPath[2].split("=");
+			 var sDataVoo = aDatePath[1].slice(0, -1);
+			 
+			 oRouter.navTo("details", {
+				CompanhiaAerea: CompanhiaAerea,
+				NumeroConexao: NumeroConexao,
+				DataVoo : sDataVoo
+			 });
 		}
 
 	});

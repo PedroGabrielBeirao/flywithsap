@@ -13,7 +13,7 @@ sap.ui.define([
 		onInit: function () {
 			// Get  Model and set it to view
 			var oModel = this.getOwnerComponent().getModel();
-			oModel.setSizeLimit(1000000000);
+			oModel.setSizeLimit(1000000);
 			var oView = this.getView();
 			oView.setModel(oModel);
 
@@ -124,10 +124,10 @@ sap.ui.define([
 			this._oView.byId("typeInput").setSelectedKey("C");    
 		},
 		
-		onSelect: function (oEvent) {
+	/*	onSelect: function (oEvent) {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("details");
-		},
+		},*/
 		
 		onSwitch: function () {
 			this._oView = this.getView();

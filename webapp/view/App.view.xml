@@ -6,6 +6,7 @@
 	
 <Shell>
 		<App id="app">
+			 <!-- pages will be filled automatically via routing --> 
 		</App>
 	</Shell>
 </mvc:View>

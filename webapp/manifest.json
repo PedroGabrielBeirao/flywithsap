@@ -105,7 +105,7 @@
 					"target": "home"
 				},
 				{
-					"pattern": "details",
+					"pattern": "details/{CompanhiaAerea},{NumeroConexao},{DataVoo}",
 					"name": "details",
 					"target": "details"
 				}
