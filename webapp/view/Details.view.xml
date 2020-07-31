@@ -12,13 +12,34 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 	enableLazyLoading="true"> 
 
 <!-- DETAIL HEADER SECTION -->
+		<uxap:headerContent>
+			<layout:VerticalLayout width="33.33%"/>
+			<layout:VerticalLayout width="33.33%"/>
+			<layout:VerticalLayout width="33.33%"/>
+			<layout:VerticalLayout width="33.33%"/>
+			<layout:VerticalLayout width="33.33%"/>
+			<layout:VerticalLayout>
+			<HBox fitContainer="true" width="auto" alignItems="Center" direction="Row"	justifyContent="Start">
+				<items>
+					<Text text="{i18n>ReservationName}"></Text>
+					<Select id="clienteSelect"  width= "10rem" items="{
+							path: '/ClienteSet',
+							sorter: { path: 'Nome' }
+						}">
+					<core:Item key="{Codigo}" text="{Nome}" />
+				</Select>
+				</items>
+			</HBox>
+		</layout:VerticalLayout>
+		
+</uxap:headerContent>
 	<uxap:headerTitle id = "detailsHeaderTitle Section">
 			<uxap:ObjectPageHeader id="detailsHeader"
 				objectImageURI="sap-icon://tags"
 				objectImageShape="Circle"
 				objectImageAlt="flight infos"
 				isObjectIconAlwaysVisible="false"
-				objectTitle="FlightID"
+				objectTitle="{NumeroConexao}"
 				isObjectTitleAlwaysVisible="false"
 				objectSubtitle="{CompanhiaAerea}" 
 				isObjectSubtitleAlwaysVisible="false"
@@ -26,34 +47,39 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 				>
 			<uxap:actions>
 					<Button icon="sap-icon://home" text="Back" type="Transparent"  width="auto" press="onNavBack"/>
+					<Button  icon="sap-icon://add" text="new client" type="Transparent"  width="auto" press="onCreateUser" />
 				</uxap:actions>
 			</uxap:ObjectPageHeader>
 		</uxap:headerTitle> 
 		
 <!-- SECTIONS -->
 <uxap:sections id="sections">
-	
 	<!-- first section FROM -->
 	<uxap:ObjectPageSection showTitle="true" title="Page Section Title" titleUppercase="false" visible="true" class="sapUiTinyMargin">
 		<uxap:subSections>
-				<uxap:ObjectPageSubSection title="From..." mode="Expanded" class="sapUiTinyMargin">
+				<uxap:ObjectPageSubSection title="{i18n>subsectionFromTitle}" mode="Expanded" class="sapUiTinyMargin">
 					<uxap:blocks>
 						<HBox fitContainer="true" width="auto" alignItems="Center" direction="Row"	justifyContent="Start">
 								<items>
+									<core:Icon src="sap-icon://journey-depart" />
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
-											<Title text="Lisboa" titleStyle="H2" textAlign="Begin" class="sapUiTinyMargin"/>
-											<Label text="Portugal" textAlign="Begin"/>
+											<Title text="{CidadeOrigem}" titleStyle="H2" textAlign="Begin" class="sapUiTinyMargin"/>
+											<Label text="{AeroportoOrigem}" textAlign="Begin"/>
 										</items>
 									</VBox>
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
-											<Title text="8:00:00 AM" titleStyle="H3" textAlign="Begin" class="sapUiSmallMargin"/>
+											<Title text="{ path: 'HorarioPartida', 
+															type: 'sap.ui.model.odata.type.Time', 
+															formatOptions: { UTC: true, style: 'medium' }}"
+											titleStyle="H3" textAlign="Begin" class="sapUiSmallMargin"/>
 										</items>
 									</VBox>
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
-											<Title text="{DataVoo}" textAlign="Begin" class="sapUiSmallMargin"/>
+											<Title id="dataVoo" text="{path: 'DataVoo', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}"
+											textAlign="Begin" class="sapUiSmallMargin" titleStyle="H3"/>
 										</items>
 									</VBox>
 								</items>
@@ -62,31 +88,40 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 				</uxap:ObjectPageSubSection>
 		</uxap:subSections>
 	</uxap:ObjectPageSection>
-	
 	<!-- second section TO -->
 		<uxap:ObjectPageSection showTitle="true" title="Page Section Title" titleUppercase="false" visible="true" class="sapUiTinyMargin">
 		<uxap:subSections>
-				<uxap:ObjectPageSubSection title="From..." mode="Expanded" class="sapUiTinyMargin">
+				<uxap:ObjectPageSubSection title="{i18n>subsectionToTitle}" mode="Expanded" class="sapUiTinyMargin">
 					<uxap:blocks>
 						<HBox fitContainer="true" width="auto" alignItems="Center" direction="Row"	justifyContent="Start">
 								<items>
+									<core:Icon src="sap-icon://journey-arrive" />
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
-											<Title text="Lisboa" titleStyle="H2" textAlign="Begin" class="sapUiTinyMargin"/>
-											<Label text="Portugal" textAlign="Begin"/>
+											<Title text="{CidadeDestino}" titleStyle="H2" textAlign="Begin" class="sapUiTinyMargin"/>
+											<Label text="{AeroportoDestino}" textAlign="Begin"/>
 										</items>
 									</VBox>
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
-											<Title text="8:00:00 AM" titleStyle="H3" textAlign="Begin" class="sapUiSmallMargin"/>
+											<Title text="{ path: 'HorarioChegada', 
+															type: 'sap.ui.model.odata.type.Time', 
+															formatOptions: { UTC: true, style: 'medium' }}" 
+												titleStyle="H3" textAlign="Begin" class="sapUiSmallMargin"/>
 										</items>
 									</VBox>
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
 											<VBox width ="auto" alignItems="Center" direction="Column" justifyContent="End">
 												<items>
-												<Title text="12/15/2020" textAlign="Begin" class="sapUiSmallMargin"/>
-												<ObjectAttribute title="Arrive in" text="2 days"/>
+												<Title text="{
+												parts: [ 
+														{path:'DataVoo'},
+														{path: 'DiasApos'}
+														],
+												formatter:'.formatter.calcArrivalDate'
+												}" 
+												textAlign="Begin" class="sapUiSmallMargin" titleStyle="H3"/>
 												</items>
 											</VBox>
 										</items>
@@ -98,64 +133,61 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 		</uxap:subSections>
 	</uxap:ObjectPageSection>
 <!-- SECTION DETAILS -->
-	<uxap:ObjectPageSection showTitle="true" title="Detalhes" titleUppercase="true">
+	<uxap:ObjectPageSection showTitle="true" title="{i18n>pageSubSectionDetailsTitle}" titleUppercase="true">
 				<uxap:subSections>
 					<uxap:ObjectPageSubSection mode="Expanded">
 						<uxap:blocks>
 							<HBox fitContainer="true" width="auto" height="auto" alignItems="Center" direction="Row"	justifyContent="Start">
 										<items>
-													<VBox width ="50%" alignItems="Center" direction="Column" justifyContent="End" >
-														<items>
-															<ObjectHeader 
-																intro="Classe Económica" 
-																title="Preço" 
+											<VBox width ="50%" alignItems="Center" direction="Column" justifyContent="End" >
+												<items>
+		<!--object header PRICE -->
+													<ObjectHeader id="PriceObjectHeader" 
+																title="{i18n>PriceObjectHeaderTitle}" 
 																icon="sap-icon://travel-expense"
-																number="544" 
-																responsive="true"
+																number="{PrecoVoo}"
+																numberState="Success"
+																responsive="false"
 																fullScreenOptimized="true"
-																numberUnit="EUR">
+																numberUnit="{Moeda}">
 															</ObjectHeader>
-	
-															<ObjectHeader intro="Reservas" title="Disponíveis" icon="sap-icon://lateness"
-															number="15" numberUnit="Lugares"
-															responsive="true"
-																fullScreenOptimized="true"
-															numberState="Warning">
+		<!--object header SEATS -->
+															<ObjectHeader id="SeatsObjectHeader" 
+															intro="{i18n>objectHeaderSeatsIntro}" 
+															title="{i18n>objectHeaderSeatsTitle}" 
+															icon="sap-icon://lateness"
+															numberUnit="{i18n>SeatsAvailableUnit}" 
+															responsive="true" 
+															fullScreenOptimized="true"
+															>
 														</ObjectHeader>
 												</items>
 											</VBox>
 											<VBox width="40%">
 												<items>
 													<List>
-														<infoToolbar>
-															<Toolbar width="100%" height="auto"  visible="false" enabled="true">
-																<content>
-																	<Label text="Label" />
-																</content>
-															</Toolbar>
-														</infoToolbar>
-														<headerToolbar>
-															<Toolbar enabled="true" visible="false" >
-																<content>
-																	<SearchField placeholder="Search" showSearchButton="true"  width="100%"/>
-																</content>
-															</Toolbar>
-														</headerToolbar>
 														<items>
-															<DisplayListItem label="Origem" value="Lisboa"  type="Inactive" selected="false"/>
-															<DisplayListItem label="Partida" value="8:00:00 AM"  type="Inactive"/>
-															<DisplayListItem label="Destino" value="Porto"  type="Inactive" />
-															<DisplayListItem label="Chegada" value="12:00:00 PM"  type="Inactive" selected="false"/>
-															<DisplayListItem label="Dias Após" value="2" type="Inactive"/>
-															<DisplayListItem label="Preço" value="455" type="Inactive" />
-															<DisplayListItem label="Moeda" value="EUR"  type="Inactive" selected="false"/>
+															<DisplayListItem label="{i18n>listOrigin}" value="{CidadeOrigem}"  type="Inactive" selected="false"/>
+															<DisplayListItem label="{i18n>listDeparture}" 
+																	value="{ path: 'HorarioPartida', 
+																			type: 'sap.ui.model.odata.type.Time', 
+																			formatOptions: { UTC: true, style: 'medium' }}"  
+																			type="Inactive"/>
+															<DisplayListItem label="{i18n>listDestiny}" value="{CidadeDestino}"  type="Inactive" />
+															<DisplayListItem label="{i18n>listArrival}" value="{ path: 'HorarioChegada', 
+																			type: 'sap.ui.model.odata.type.Time', 
+																			formatOptions: { UTC: true, style: 'medium' }}"  
+															type="Inactive" selected="false"/>
+															<DisplayListItem label="{i18n>listDaysAfter}" value="{DiasApos}" type="Inactive"/>
+															<DisplayListItem label="{i18n>listPrice}" value="{PrecoVoo}" type="Inactive" />
+															<DisplayListItem label="{i18n>listUnit}" value="{Moeda}"  type="Inactive" selected="false"/>
 														</items>
 													</List>
+<!--BUTTONS -->
 													<Toolbar>
 														<content>
 															<ToolbarSpacer width=""/>
-															<Button text="Finalizar Reserva" type="Emphasized"/>
-															<Button text="Não tenho registo" type="Default"/>
+															<Button id="bookButton" text="{i18n>ButtonReserve}" type="Emphasized" press="onBookButtonPress"/>
 															</content>
 													</Toolbar>
 												</items>

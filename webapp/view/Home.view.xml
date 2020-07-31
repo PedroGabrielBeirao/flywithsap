@@ -5,8 +5,9 @@
 			<pages>
 				<Page title="Fly with SAP!">
 					<content>
-						<mvc:XMLView viewName="pt.procensus.FlyWithSapApp.view.FlightSearch"/>
+							<mvc:XMLView viewName="pt.procensus.FlyWithSapApp.view.FlightSearch"/>
 				<!--		<mvc:XMLView viewName="pt.procensus.FlyWithSapApp.view.Details"/> -->
+			<!--			<mvc:XMLView viewName="pt.procensus.FlyWithSapApp.view.createUser"/>-->
 					</content>
 				</Page>
 			</pages>

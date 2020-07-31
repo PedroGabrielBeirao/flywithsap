@@ -38,10 +38,7 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": [
-			"sap_hcb",
-			"sap_bluecrystal"
-		]
+		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -71,19 +68,32 @@
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"settings": {
 					"defaultOperationMode": "Server",
-					"defaultBindingMode": "OneWay",
+					"defaultBindingMode": "TwoWay",
 					"defaultCountMode": "Request"
 				},
 				"dataSource": "ZAPP_FLIGHTS_SRV",
 				"preload": true
+			},
+			"searchInputs": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"preload": false
+			},
+			"clientModel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"preload": false
+			},
+			"reservaVooModel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"settings": {},
+				"preload": false
 			}
 		},
 		"resources": {
-			"css": [
-				{
-					"uri": "css/style.css"
-				}
-			]
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		},
 		"routing": {
 			"config": {
@@ -93,23 +103,24 @@
 				"viewPath": "pt.procensus.FlyWithSapApp.view",
 				"controlAggregation": "pages",
 				"controlId": "app",
-				"transition":"slide",
+				"transition": "slide",
 				"bypassed": {
 					"target": "notFound"
 				}
 			},
-			"routes": [
-				{
-					"name": "home",
-					"pattern": "",
-					"target": "home"
-				},
-				{
-					"pattern": "details/{CompanhiaAerea},{NumeroConexao},{DataVoo}",
-					"name": "details",
-					"target": "details"
-				}
-			],
+			"routes": [{
+				"name": "home",
+				"pattern": "",
+				"target": "home"
+			}, {
+				"pattern": "details/{CompanhiaAerea},{NumeroConexao},{DataVoo}",
+				"name": "details",
+				"target": "details"
+			}, {
+				"name": "createUser",
+				"pattern": "createUser",
+				"target": "createUser"
+			}],
 			"targets": {
 				"home": {
 					"viewType": "XML",
@@ -128,6 +139,12 @@
 					"viewId": "notFound",
 					"viewName": "NotFound",
 					"transition": "show",
+					"viewLevel": 4
+				},
+				"createUser": {
+					"viewType": "XML",
+					"viewId": "createUser",
+					"viewName": "createUser",
 					"viewLevel": 3
 				}
 			}

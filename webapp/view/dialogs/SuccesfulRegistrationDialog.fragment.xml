@@ -1,0 +1,23 @@
+<core:FragmentDefinition 
+	xmlns:core="sap.ui.core" 
+	xmlns="sap.m">
+	<Dialog 
+		icon="sap-icon://hr-approval" 
+		showHeader="true" 
+		title="Parabéns!"
+		type="Standard">
+		<content>
+			<Text text="Utiizador criado com sucesso..." width="296px" maxLines="1" wrapping="false" textAlign="Center" textDirection="Inherit"
+				visible="true"/>
+		</content>
+		<buttons>
+			<Button text="Continuar" type="Default" icon="sap-icon://flight" iconFirst="true" width="134px" enabled="true" visible="true"
+				iconDensityAware="false" press="onNavBack"/>
+			<Button text="Buscar de Novo" type="Default" icon="sap-icon://refresh" iconFirst="true" width="auto" enabled="true" visible="true"
+				iconDensityAware="false" press="onNavToHome"/>
+		</buttons>
+		<customHeader/>
+		<endButton/>
+		<subHeader/>
+	</Dialog>
+</core:FragmentDefinition>

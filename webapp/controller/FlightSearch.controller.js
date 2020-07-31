@@ -16,10 +16,10 @@ sap.ui.define([
 			oModel.setSizeLimit(1000000);
 			var oView = this.getView();
 			oView.setModel(oModel);
-
 			//initialize the table, items ="null" at start 
 			var oTable = this.getView().byId("flightsTable");
 			this.oBindingTable = oTable.getBindingInfo("items");
+			
 		},
 
 		onSearch: function () {
@@ -36,14 +36,20 @@ sap.ui.define([
 			var oColumnListItem = this.getView().byId("colunas");
 			var aFiltersForItems = [];
 			var aPaths = this._getFlightClass(sClasse);
+			
+			var sClasseKey = oView.byId("typeInput").getSelectedItem().getKey();
+			this.getOwnerComponent().getModel("reservaVooModel").setProperty("/ClasseVoo",sClasseKey);
+			
+			
 
-			//refresh the table
-			oTable.getModel().refresh(true);
+			//refresh the table and the json model
+			this.getOwnerComponent().getModel("searchInputs").refresh(true); 
+			oTable.getModel().refresh(true); 
 
 			//push inputs to the array to serve as filter.
-			aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
+	/*		aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
 			aFiltersForItems.push(new sap.ui.model.Filter("CidadeDestino", sap.ui.model.FilterOperator.EQ, oDestiny));
-			aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.EQ, oDate));
+			aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.EQ, oDate)); */
 
 			// insert the cell dinamically without predefined binding path's
 			oColumnListItem.insertCell(new sap.m.ObjectNumber({
@@ -65,6 +71,8 @@ sap.ui.define([
 				}
 			}), 5); // cell index 
 			//  Binding is done only when the button is pressed, at initialization items="" at table
+			
+			
 			oTable.bindItems({
 				path: "/VooSet",
 				template: this.oBindingTable.template,
@@ -72,9 +80,11 @@ sap.ui.define([
 				filters: aFiltersForItems
 			});
 			this._toggleVisibility();
+			this._saveUserInputData(sClasse);        
+			
 		},
 		
-
+		
 		/* logic to get the paths 
 		 *corresponding to the oData, based on the user 
 		 *selection for the class of flight
@@ -106,7 +116,7 @@ sap.ui.define([
 			this._oSearchPanel.setVisible(false);
 		},
 		
-	
+		
 		onConfirmationRefresh : function() {
 			this._oTablePanel = this.byId("LazyLoadingTable");
 			this._oTablePanel.setVisible(false);
@@ -121,13 +131,8 @@ sap.ui.define([
 			this._oView.byId("originInput").setValue("");
 			this._oView.byId("destinationInput").setValue("");
 			this._oView.byId("dateInput").setValue("");
-			this._oView.byId("typeInput").setSelectedKey("C");    
+			this._oView.byId("typeInput").setSelectedKey("C");
 		},
-		
-	/*	onSelect: function (oEvent) {
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-			oRouter.navTo("details");
-		},*/
 		
 		onSwitch: function () {
 			this._oView = this.getView();
@@ -135,7 +140,13 @@ sap.ui.define([
 			var oDestiny = this._oView.byId("destinationInput").getValue();
 			this._oView.byId("originInput").setValue(oDestiny);
 			this._oView.byId("destinationInput").setValue(oOrigin);
+		},
+		
+		_saveUserInputData: function(sClasse) {
+			// save some data to the searchInputs model before navigation
+			var auxiliarModel = this.getOwnerComponent().getModel("searchInputs");
+			auxiliarModel.setProperty("/ClasseVoo",sClasse);
 		}
-			
+		
 	});
 });

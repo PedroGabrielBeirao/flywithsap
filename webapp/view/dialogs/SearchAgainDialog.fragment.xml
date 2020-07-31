@@ -16,7 +16,6 @@
             press="onConfirmationRefresh"
             type="Accept"
             />
-            
          <Button
             text="{i18n>cancelButton}"
             press="onCloseDialog"

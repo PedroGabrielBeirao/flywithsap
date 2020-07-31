@@ -1,0 +1,127 @@
+<mvc:View 
+xmlns:core="sap.ui.core"
+xmlns:mvc="sap.ui.core.mvc" 
+xmlns="sap.m"
+xmlns:form="sap.ui.layout.form"
+controllerName="pt.procensus.FlyWithSapApp.controller.createUser">
+
+<Page showHeader="true" title="Fly with SAP!" showFooter="false" showNavButton="true" navButtonPress="onNavBack">
+<form:Form width="auto">
+				<form:title>
+					<core:Title text="{i18n>addUserTitle}" level="Auto"/>
+				</form:title>
+				<form:formContainers>
+					<form:FormContainer>
+						<form:formElements>
+							<form:FormElement>
+								<form:label>
+									<Label text="{i18n>formName}" design="Standard" width="auto" required="true" textAlign="Begin"/>
+								</form:label>
+								<form:fields>
+									<Input id="clientName"  
+									class="sapUiSmallMarginBottom"
+									placeholder="Enter client name ..."
+									valueStateText="Name must not be empty. Maximum 20 characters."
+									value="{
+										path : '/Name',
+										type : 'sap.ui.model.type.String',
+										constraints : {
+											minLength: 1,
+											maxLength: 20
+										}
+									}"
+									change= ".onInputChange" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement>
+								<form:label>
+									<Label text="{i18n>formMorada}" design="Standard" width="auto" required="true"/>
+								</form:label>
+								<form:fields>
+									<Input id="clientAddress" 
+										class="sapUiSmallMarginBottom"
+										placeholder="Enter client Address..."
+										valueStateText="Address must not be empty"
+										value="{
+											path : '/Address',
+											type : 'sap.ui.model.type.String',
+											constraints : {
+												minLength: 5,
+												maxLength: 20
+											}
+										}"
+										change= ".onInputChange" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement>
+								<form:label>
+									<Label text="{i18n>formLanguage}" design="Standard" width="auto" required="true" />
+								</form:label>
+								<form:fields>
+									<Input id="clientLanguage" 
+									class="sapUiSmallMarginBottom"
+										placeholder="Enter Country Initials..."
+										valueStateText="Language must not be empty.Maximum 3 characters."
+										value="{
+											path : '/Language',
+											type : 'sap.ui.model.type.String',
+											constraints : {
+												minLength: 1,
+												maxLength: 3
+											}
+										}"
+										change= ".onInputChange" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement >
+								<form:label>
+									<Label text="{i18n>formPhone}" design="Standard" width="auto" required="true" />
+								</form:label>
+								<form:fields>
+									<Input id="clientPhone" 
+										class="sapUiSmallMarginBottom"
+										placeholder="Enter client Phone Number..."
+										valueStateText="Phone must not be empty.Minimum 8 digits."
+										value="{
+											path : '/Phone',
+											type : 'sap.ui.model.type.String',
+											constraints : {
+												minLength: 8,
+												maxLength: 15
+											}
+										}"
+										change= ".onInputChange" />
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement>
+								<form:label>
+									<Label text="{i18n>formEmail}" design="Standard" width="auto" required="true" />
+								</form:label>
+								<form:fields>
+									<Input id="clientEmail" 
+									class="sapUiSmallMarginBottom"
+									type="Email"
+									placeholder="Enter e-mail ..."
+									valueStateText="E-mail must be a valid email address."
+									value="{
+										path: '/Email',
+										type: '.customEMailType'
+									}" />
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+						<form:title/>
+					</form:FormContainer>
+				</form:formContainers>
+				<form:layout>
+					<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+				</form:layout>
+			</form:Form>
+				<Toolbar width="auto" height="46px">
+				<content>
+					<ToolbarSpacer width=""/>
+					<Button text="{i18n>formConfirm}" type="Emphasized"  width="166px" press="onOpenRegistrationDialog"/>
+				</content>
+			</Toolbar>
+</Page>
+</mvc:View>

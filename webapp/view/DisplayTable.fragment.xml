@@ -7,8 +7,8 @@ xmlns:core="sap.ui.core"
 			width="auto" 
 			class="sapUiResponsiveMargin"
 			growing="true"
-			growingThreshold="8"
-			growingScrollToLoad="true"
+			growingThreshold="5"
+			growingScrollToLoad="false"
 			items="{
 					path:'' 
 			}"
@@ -65,7 +65,9 @@ xmlns:core="sap.ui.core"
 								 />
 							<ObjectIdentifier 
 								 text="{Moeda}" />
-					<!--ObjectNumber Injected via the controller - index 5-->
+								 
+								<!--ObjectNumber Injected via the controller - index 5-->
+
 						</cells>
 					</ColumnListItem>
 				</items>
@@ -73,13 +75,10 @@ xmlns:core="sap.ui.core"
  <!-- CUSTOMER CHOICE - BUTTONS -->
 			<Toolbar id="tableFooter" design="Transparent" width="auto"  class="sapUiTinyMargin" >
 				<ToolbarSpacer width=""/>
-				<Button id="continueButton" text="Continue" type="Emphasized"  width="auto" enabled="false" visible="true" />
 				<Button id="searchAgainButton" 
 						press=".onOpenDialog"
 						text="Search Again" 
 						type="Reject" icon="sap-icon://refresh"
 						iconFirst="true" width="auto" enabled="true" visible="true"/>
 			</Toolbar>
-
-
 </core:FragmentDefinition> 
