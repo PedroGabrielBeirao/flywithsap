@@ -84,7 +84,7 @@ sap.ui.define([
 			
 		},
 		
-		
+		 
 		/* logic to get the paths 
 		 *corresponding to the oData, based on the user 
 		 *selection for the class of flight
