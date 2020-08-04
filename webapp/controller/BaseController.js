@@ -22,7 +22,6 @@ sap.ui.define([
 			} else {
 				this.getRouter().navTo("home", {}, true /*no history*/ );
 			}
-
 		},
 
 		/*SEARCH AGAIN DIALOG EVENT HANDLERS */
@@ -40,51 +39,8 @@ sap.ui.define([
 		},
 		onCloseDialog: function () {
 			this._getDialog().close();
-		},
-
-		/*When the user presses the desired flight */
-		onSelect: function (oEvent) {
-			// also possible: 
-			// var oRouter = this.getOwnerComponent().getRouterFor(this);
-			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-
-			var oItem = oEvent.getSource();
-			var oContext = oItem.getBindingContext();
-
-			var CompanhiaAerea = oItem.getBindingContext().getProperty("CompanhiaAerea"); //AA
-			var NumeroConexao = oItem.getBindingContext().getProperty("NumeroConexao"); // 0017
-
-			//CALCULO TEMPORARIO DOS TOTAIS de lugares vazios
-			var sTotalLugaresEcon = oItem.getBindingContext().getProperty("TotalLugaresEcon");
-			var sLugaresOcupadosEcon = oItem.getBindingContext().getProperty("LugaresOcupadosEcon");
-			var sLugaresVaziosEcon = sTotalLugaresEcon - sLugaresOcupadosEcon;
-
-			var sTotalLugares1aClass = oItem.getBindingContext().getProperty("TotalLugares1aClass");
-			var sLugaresOcupados1aClass = oItem.getBindingContext().getProperty("LugaresOcupados1aClass");
-			var sLugaresVazios1aClass = sTotalLugares1aClass - sLugaresOcupados1aClass;
-
-			var sTotalLugaresBus = oItem.getBindingContext().getProperty("TotalLugaresBus");
-			var sLugaresOcupadosBus = oItem.getBindingContext().getProperty("LugaresOcupadosBus");
-			var sLugaresVaziosBus = sTotalLugaresBus - sLugaresOcupadosBus;
-
-			//set the values to the temporary model
-			var auxiliarModel = this.getOwnerComponent().getModel("searchInputs");
-			auxiliarModel.setProperty("/LugaresVaziosEcon", sLugaresVaziosEcon);
-			auxiliarModel.setProperty("/LugaresVazios1aClass", sLugaresVazios1aClass);
-			auxiliarModel.setProperty("/LugaresVaziosBus", sLugaresVaziosBus);
-
-			//auiliar para ir buscar a dataVoo
-			var aPath = oContext.sPath.split(",");
-			var aDatePath = aPath[2].split("=");
-			var sDataVoo = aDatePath[1].slice(0, -1);
-
-			oRouter.navTo("details", {
-				CompanhiaAerea: CompanhiaAerea,
-				NumeroConexao: NumeroConexao,
-				DataVoo: sDataVoo
-			});
-
 		}
+
 	});
 
 });

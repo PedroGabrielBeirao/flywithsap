@@ -5,7 +5,7 @@ xmlns="sap.m"
 xmlns:form="sap.ui.layout.form"
 controllerName="pt.procensus.FlyWithSapApp.controller.createUser">
 
-<Page showHeader="true" title="Fly with SAP!" showFooter="false" showNavButton="true" navButtonPress="onNavBack">
+<Page showHeader="true" title="{i18n>appTitle}" showFooter="false" showNavButton="true" navButtonPress="onNavBack">
 <form:Form width="auto">
 				<form:title>
 					<core:Title text="{i18n>addUserTitle}" level="Auto"/>
@@ -20,8 +20,8 @@ controllerName="pt.procensus.FlyWithSapApp.controller.createUser">
 								<form:fields>
 									<Input id="clientName"  
 									class="sapUiSmallMarginBottom"
-									placeholder="Enter client name ..."
-									valueStateText="Name must not be empty. Maximum 20 characters."
+									placeholder="{i18n>namePlaceholder}"
+									valueStateText="{i18n>nameValueState}"
 									value="{
 										path : '/Name',
 										type : 'sap.ui.model.type.String',
@@ -40,8 +40,8 @@ controllerName="pt.procensus.FlyWithSapApp.controller.createUser">
 								<form:fields>
 									<Input id="clientAddress" 
 										class="sapUiSmallMarginBottom"
-										placeholder="Enter client Address..."
-										valueStateText="Address must not be empty"
+										placeholder="{i18n>moradaPlaceHolder}"
+										valueStateText="{i18n>moradaValueState}"
 										value="{
 											path : '/Address',
 											type : 'sap.ui.model.type.String',
@@ -60,8 +60,8 @@ controllerName="pt.procensus.FlyWithSapApp.controller.createUser">
 								<form:fields>
 									<Input id="clientLanguage" 
 									class="sapUiSmallMarginBottom"
-										placeholder="Enter Country Initials..."
-										valueStateText="Language must not be empty.Maximum 3 characters."
+										placeholder="{i18n>languagePlaceHolder}"
+										valueStateText="{i18n>languageValueState}"
 										value="{
 											path : '/Language',
 											type : 'sap.ui.model.type.String',
@@ -80,8 +80,8 @@ controllerName="pt.procensus.FlyWithSapApp.controller.createUser">
 								<form:fields>
 									<Input id="clientPhone" 
 										class="sapUiSmallMarginBottom"
-										placeholder="Enter client Phone Number..."
-										valueStateText="Phone must not be empty.Minimum 8 digits."
+										placeholder="{i18n>phonePlaceHolder}"
+										valueStateText="{i18n>phoneValueState}"
 										value="{
 											path : '/Phone',
 											type : 'sap.ui.model.type.String',
@@ -101,8 +101,8 @@ controllerName="pt.procensus.FlyWithSapApp.controller.createUser">
 									<Input id="clientEmail" 
 									class="sapUiSmallMarginBottom"
 									type="Email"
-									placeholder="Enter e-mail ..."
-									valueStateText="E-mail must be a valid email address."
+									placeholder="{i18n>emailPlaceHolder}"
+									valueStateText="{i18n>emailValueState}"
 									value="{
 										path: '/Email',
 										type: '.customEMailType'

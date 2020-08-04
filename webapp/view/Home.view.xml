@@ -3,7 +3,7 @@
 	<Shell>
 		<App id="idAppControl">
 			<pages>
-				<Page title="Fly with SAP!">
+				<Page title="{i18n>appTitle}">
 					<content>
 							<mvc:XMLView viewName="pt.procensus.FlyWithSapApp.view.FlightSearch"/>
 				<!--		<mvc:XMLView viewName="pt.procensus.FlyWithSapApp.view.Details"/> -->

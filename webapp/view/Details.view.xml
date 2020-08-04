@@ -22,12 +22,22 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 			<HBox fitContainer="true" width="auto" alignItems="Center" direction="Row"	justifyContent="Start">
 				<items>
 					<Text text="{i18n>ReservationName}"></Text>
-					<Select id="clienteSelect"  width= "10rem" items="{
+					<Input 
+						id="clienteSelect"
+						type="Text"
+						placeholder="Choose Client..."
+						showValueHelp="true"
+						valueHelpOnly="true"
+						valueHelpRequest="onValueHelpRequest"
+						class="sapUiSmallMarginBottom"
+						width="10rem"
+					/>
+				<!--	<Select id="clienteSelect"  width= "10rem" items="{
 							path: '/ClienteSet',
 							sorter: { path: 'Nome' }
 						}">
 					<core:Item key="{Codigo}" text="{Nome}" />
-				</Select>
+				</Select>-->
 				</items>
 			</HBox>
 		</layout:VerticalLayout>
@@ -61,7 +71,7 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 					<uxap:blocks>
 						<HBox fitContainer="true" width="auto" alignItems="Center" direction="Row"	justifyContent="Start">
 								<items>
-									<core:Icon src="sap-icon://journey-depart" />
+									<core:Icon src="sap-icon://journey-depart" tooltip="departure" />
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
 											<Title text="{CidadeOrigem}" titleStyle="H2" textAlign="Begin" class="sapUiTinyMargin"/>
@@ -95,7 +105,7 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 					<uxap:blocks>
 						<HBox fitContainer="true" width="auto" alignItems="Center" direction="Row"	justifyContent="Start">
 								<items>
-									<core:Icon src="sap-icon://journey-arrive" />
+									<core:Icon src="sap-icon://journey-arrive" tooltip="arrival" />
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
 											<Title text="{CidadeDestino}" titleStyle="H2" textAlign="Begin" class="sapUiTinyMargin"/>

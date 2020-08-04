@@ -3,8 +3,6 @@ sap.ui.define([
 ], function (coreLibrary) {
 	"use strict";
 
-	/* @Global
-	 * Just For Simplification */
 	var ValueState = coreLibrary.ValueState;
 
 	return {
@@ -16,7 +14,6 @@ sap.ui.define([
 			return availableSeats;
 		},
 
-		// then try to dont repeat the code from above, how to call the variable from above
 		availableSeatsStatus: function (iTotalLugares, iLugaresOcupados) {
 			var iAvailableSeats = (iTotalLugares - iLugaresOcupados);
 			if (iAvailableSeats >= 20) {
@@ -46,9 +43,13 @@ sap.ui.define([
         	var mm = incrementedDate.getMonth() + 1; //January is 0!
         	var yy = incrementedDate.getFullYear() - 2000;
 			return (mm + "/" + dd + "/" + yy);
+		},
+		
+		_formatDate: function (departureDate) {
+			var formatedDateToUnix = new Date(departureDate).getTime() / 1000;
+			var sFormatedDate = "/Date(" + formatedDateToUnix + "000" + ")/";
+			return (sFormatedDate);
 		}
 		
-		
-
 	};
 });

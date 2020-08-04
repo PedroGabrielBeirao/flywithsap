@@ -3,16 +3,15 @@ sap.ui.define([
 	"../model/formatter",
 	"sap/ui/core/library",
 	"sap/m/MessageBox",
-	"sap/m/MessageToast"
-], function (BaseController, formatter, coreLibrary, MessageBox, MessageToast) {
+	"sap/m/MessageToast",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"
+], function (BaseController, formatter, coreLibrary, MessageBox, MessageToast, Filter, FilterOperator) {
 	"use strict";
-
-	var ValueState = coreLibrary.ValueState;
 
 	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.Details", {
 
 		formatter: formatter,
-
 		onInit: function () {
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this._oRouter.getRoute("details").attachPatternMatched(this._onDetailMatched, this);
@@ -28,7 +27,6 @@ sap.ui.define([
 		},
 
 		//retrieving user input data needed in details view
-
 		_getUserInputData: function () {
 			//calling the searchInput model
 			var auxiliarModel = this.getOwnerComponent().getModel("searchInputs");
@@ -39,132 +37,145 @@ sap.ui.define([
 
 			//try to use a global formatter later
 			this._getFlightClassTemporary(sClasseVoo);
-			
-			//logic to hide the buttons when the there are no available seats
+
+			//logic to disable the buttons when the there are no available seats
 			var iAvailableSeats = this.getView().byId("SeatsObjectHeader").getNumber();
 			this._bookButtonAble(iAvailableSeats);
-	
 		},
-		_bookButtonAble : function (iAvailableSeats)  {
-			var BookButton = this.getView().byId("bookButton");
-			if (iAvailableSeats > 0 ) 
-			{
-				BookButton.setEnabled(true);
-				BookButton.setType("Emphasized");
-				BookButton.setText("BOOK NOW");
-			}
-			else{
-			BookButton.setEnabled(false);
-			BookButton.setType("Reject");
-			BookButton.setText("Class not Available for this flight");
+
+		_bookButtonAble: function (iAvailableSeats) {
+			var resourceBundle = this.getView().getModel("i18n").getResourceBundle();
+			var oBookButton = this.getView().byId("bookButton");
+			if (iAvailableSeats > 0) {
+				oBookButton.setEnabled(true).setType("Emphasized").setText(resourceBundle.getText("ButtonReserve"));
+			} else {
+				oBookButton.setEnabled(false).setType("Reject").setText(resourceBundle.getText("ButtonNotAvailable"));
 			}
 		},
 
 		_getFlightClassTemporary: function (sInputClass) {
-			
+			var oView = this.getView();
+			var auxiliaryModel = this.getOwnerComponent().getModel("searchInputs");
+
 			if (sInputClass === "Business Class") {
-				var availableSeatsBus = this.getOwnerComponent().getModel("searchInputs").getProperty("/LugaresVaziosBus");
-				this.getView().byId("SeatsObjectHeader").setNumber(availableSeatsBus);
-				var sState = this._seatsStatusTemporary(availableSeatsBus);
-				this.getView().byId("SeatsObjectHeader").setNumberState(sState);
+				var availableSeatsBus = auxiliaryModel.getProperty("/LugaresVaziosBus");
+				var sState = formatter.availableSeatsStatus(availableSeatsBus);
+				oView.byId("SeatsObjectHeader").setNumber(availableSeatsBus);
+				oView.byId("SeatsObjectHeader").setNumberState(sState);
 
 			} else if (sInputClass === "Economy Class") {
-				var availableSeatsEco = this.getOwnerComponent().getModel("searchInputs").getProperty("/LugaresVaziosEcon");
-				this.getView().byId("SeatsObjectHeader").setNumber(availableSeatsEco);
-				var sStateEco = this._seatsStatusTemporary(availableSeatsEco);
-				this.getView().byId("SeatsObjectHeader").setNumberState(sStateEco);
+				var availableSeatsEco = auxiliaryModel.getProperty("/LugaresVaziosEcon");
+				var sStateEco = formatter.availableSeatsStatus(availableSeatsEco);
+				oView.byId("SeatsObjectHeader").setNumber(availableSeatsEco);
+				oView.byId("SeatsObjectHeader").setNumberState(sStateEco);
+
 			} else if (sInputClass === "First Class") {
-				var availableSeats1aClass = this.getOwnerComponent().getModel("searchInputs").getProperty("/LugaresVaziosBus");
-				this.getView().byId("SeatsObjectHeader").setNumber(availableSeats1aClass);
-				var sState1aClass = this._seatsStatusTemporary(availableSeats1aClass);
-				this.getView().byId("SeatsObjectHeader").setNumberState(sState1aClass);
+				var availableSeats1aClass = auxiliaryModel.getProperty("/LugaresVaziosBus");
+				var sState1aClass = formatter.availableSeatsStatus(availableSeats1aClass);
+				oView.byId("SeatsObjectHeader").setNumber(availableSeats1aClass);
+				oView.byId("SeatsObjectHeader").setNumberState(sState1aClass);
 			}
 		},
 
-		_seatsStatusTemporary: function (iAvailableSeats) {
-			if (iAvailableSeats >= 20) {
-				return ValueState.Success;
-			} else if (iAvailableSeats < 20 && iAvailableSeats > 10) {
-				return ValueState.Warning;
-			} else {
-				return ValueState.Error;
-			}
-		},
-
-		formatDate: function (departureDate) {
-			var formatedDateToUnix = new Date(departureDate).getTime() / 1000;
-			var sFormatedDate = "/Date(" + formatedDateToUnix + "000" + ")/";
-			return (sFormatedDate);
-		},
-
+		//Navigation to the create user page
 		onCreateUser: function (oEvent) {
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			oRouter.navTo("createUser");
 		},
 
-
-/* book operations*/
-
+		/* BOOK OPERATIONS*/
 		onBookButtonPress: function (oEvent) {
-			/*
-		"CompanhiaAerea": "AA",
-        "NumeroConexao": "0017",
-        "DataVoo": "/Date(1579132800000)/",
-        "NumeroReserva": "00000002",
-        "CodigoCliente": "00003133",
-        "ClasseVoo": "C", tenhod e fazer o get do model
-        "ValorPago": "999.99",
-        "Moeda": "USD"
+		/* ReservaEntity STRUCTURE
+			"CompanhiaAerea": "AA", "NumeroConexao": "0017",
+    		"DataVoo": "/Date(1579132800000)/", "NumeroReserva": "00000002",
+    		"CodigoCliente": "00003133", "ClasseVoo": "C", 
+        	"ValorPago": "999.99","Moeda": "USD"
 			*/
+
+			var resourceBundle = this.getView().getModel("i18n").getResourceBundle();
+			var oView = this.getView();
 			var oReservaModel = this.getOwnerComponent().getModel("reservaVooModel");
 			var oItem = oEvent.getSource();
 			var oContext = oItem.getBindingContext();
 
-			//vou buscar os valores e associo os que faltam ao model reservaVoo
-			var sCompanhiaAerea = this.getView().byId("detailsHeader").getObjectSubtitle(); //certo
-			oReservaModel.setProperty("/CompanhiaAerea", sCompanhiaAerea);
-
-			var iNumeroConexao = this.getView().byId("detailsHeader").getObjectTitle(); //certo
-			oReservaModel.setProperty("/NumeroConexao", iNumeroConexao);
-
+			//GET VALUES
+			var sCompanhiaAerea = oView.byId("detailsHeader").getObjectSubtitle();
+			var iNumeroConexao = oView.byId("detailsHeader").getObjectTitle();
 			var oDataVoo = oContext.getProperty("DataVoo");
-			var sFormatedDate = this.formatDate(oDataVoo);
-
-			oReservaModel.setProperty("/DataVoo", sFormatedDate);
+			var sFormatedDate = formatter._formatDate(oDataVoo);
 			
-			var iCodigoCliente = this.getView().byId("clienteSelect").getSelectedKey(); //ir buscar ao input que ainda nao fiz
-			oReservaModel.setProperty("/CodigoCliente", iCodigoCliente);
-			//classe de voo ja esta no model
-			var iValorPago = this.getView().byId("PriceObjectHeader").getNumber();
-			oReservaModel.setProperty("/ValorPago", iValorPago);
+		/*	var iCodigoCliente = oView.byId("clienteSelect").getSelectedKey();*/
+			/* var classe de voo already set to the model */
+			var iValorPago = oView.byId("PriceObjectHeader").getNumber();
+			var iMoeda = oView.byId("PriceObjectHeader").getNumberUnit();
 
-			var iMoeda = this.getView().byId("PriceObjectHeader").getNumberUnit();
+			//SET VALUES to the RESERVA AUXILIARY MODEL
+			oReservaModel.setProperty("/CompanhiaAerea", sCompanhiaAerea);
+			oReservaModel.setProperty("/NumeroConexao", iNumeroConexao);
+			oReservaModel.setProperty("/DataVoo", sFormatedDate);
+	/*		oReservaModel.setProperty("/CodigoCliente", iCodigoCliente);*/
+			/* var classe de voo already set to the model */
+			oReservaModel.setProperty("/ValorPago", iValorPago);
 			oReservaModel.setProperty("/Moeda", iMoeda);
 
-			/*All needed data set to the model at this point*/
-
-			/*DO THE POST REQUEST*/
+			/****@POST
+			 **CREATE
+			 **RESERVATION 
+			 **IN "ReservaSet" */
 			oReservaModel.refresh("true");
 			var oModelDB = this.getOwnerComponent().getModel();
 			var oReservaModelOdata = oReservaModel.oData;
-			
-			MessageBox.confirm("Book this flight confirmation, [OK].", {
+			MessageBox.confirm(resourceBundle.getText("BookMessage"), {
 				actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
 				emphasizedAction: MessageBox.Action.OK,
 				onClose: function (sButton) {
-					if(sButton === MessageBox.Action.OK ){
-					oModelDB.create("/ReservaSet", oReservaModelOdata);
-					
-						MessageToast.show("Congratulations, your flight is booked , we fly together!");
-						}
-					else if(sButton === MessageBox.Action.CANCEL) {
-						MessageToast.show("Reservation Cancelled");
+					if (sButton === MessageBox.Action.OK) {
+						oModelDB.create("/ReservaSet", oReservaModelOdata);
+						MessageToast.show(resourceBundle.getText("BookConfirmed"));
+					} else if (sButton === MessageBox.Action.CANCEL) {
+						MessageToast.show(resourceBundle.getText("BookCancel"));
 					}
 				}
 			});
-			
-		}
+
+		},
+		
+		//valuehelp dialog methods for the choose client input
+		onValueHelpRequest: function () {
+			if (!this._oChooseClientDialog) {
+				this._oChooseClientDialog = sap.ui.xmlfragment("pt.procensus.FlyWithSapApp.view.dialogs.ChooseClientDialog", this);
+				this.getView().addDependent(this._oChooseClientDialog);
+				this._oChooseClientDialog.open();
+			} else {
+				this._oChooseClientDialog.open();
+			}
+		},
 	
+		onValueHelpDialogClose: function (oEvent) {
+			var oReservaModel = this.getOwnerComponent().getModel("reservaVooModel");
+			
+			var oSelectedItem = oEvent.getParameter("selectedItem"),
+				oInput = this.byId("clienteSelect");
+
+			if (!oSelectedItem) {
+				oInput.resetProperty("value");
+				return;
+			}
+			else{
+			var aux = oSelectedItem.getTitle();
+			oInput.setValue(aux);
+			var iCodigoClient = oSelectedItem.getDescription();
+			oReservaModel.setProperty("/CodigoCliente", iCodigoClient);
+			}
+		},
+	
+			onSearch: function (oEvent) {
+			var sValue = oEvent.getParameter("value");
+			var oFilter = new Filter("Nome", FilterOperator.Contains, sValue);
+			var oBinding = oEvent.getParameter("itemsBinding");
+			oBinding.filter([oFilter]);
+		},
+		
 	});
 
 });

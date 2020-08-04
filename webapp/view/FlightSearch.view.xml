@@ -17,11 +17,17 @@
 		<items>
 				<ComboBox id="originInput" 
 						placeholder="{i18n>originPlaceholder}"
+						showSecondaryValues="true"
 						width="auto"
 						value="NEW YORK"
 						items="{
-							path: '/CidadeSet'
-						}">
+							path: '/CidadeSet',
+							sorter: {
+								path:'Pais'
+							},
+							length: 999
+						}"
+						>
 						<core:Item key="{NomeCidade}" text="{NomeCidade}"/> 
 				</ComboBox>
 				<Button id="switchInputs" tooltip="Switch" icon="sap-icon://repost" type="Transparent" press=".onSwitch"/>
@@ -31,7 +37,8 @@
 						class="sapUiTinyMarginEnd"
 						value="SAN FRANCISCO"
 						items="{
-							path: '/CidadeSet'
+							path: '/CidadeSet',
+							length: 999
 						}">
 						<core:Item key="{NomeCidade}" text="{NomeCidade}"/> 
 				</ComboBox>

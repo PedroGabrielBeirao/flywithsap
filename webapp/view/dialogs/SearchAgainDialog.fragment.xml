@@ -5,23 +5,20 @@
       id="searchAgainDialog"
       title="{i18n>searchAgainDialogTitle}"
       type="Message">
- 
-	<content>
-   		<Text text="{i18n>searchAgainText}" textAlign="Begin"/>
-   	</content>
-   	
+		<content>
+   			<Text text="{i18n>searchAgainText}" textAlign="Begin"/>
+   		</content>
    		<buttons>
    		  <Button
-            text="{i18n>searchButton}"
-            press="onConfirmationRefresh"
-            type="Accept"
+        		text="{i18n>searchButton}"
+            	press="onConfirmationRefresh"
+            	type="Accept"
             />
          <Button
-            text="{i18n>cancelButton}"
-            press="onCloseDialog"
-            type="Reject"
+            	text="{i18n>cancelButton}"
+            	press="onCloseDialog"
+            	type="Reject"
             />
 		</buttons>
-	
    </Dialog>
 </core:FragmentDefinition>

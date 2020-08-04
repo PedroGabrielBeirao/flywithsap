@@ -1,9 +1,10 @@
 sap.ui.define([
 	"pt/procensus/FlyWithSapApp/controller/BaseController",
 	"../model/formatter",
+	"sap/m/MessageToast",
 	"sap/ui/core/Fragment",
 	"sap/ui/core/UIComponent"
-], function (BaseController, formatter, Fragment, UIComponent) {
+], function (BaseController, formatter, MessageToast, Fragment, UIComponent) {
 	"use strict";
 
 	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.FlightSearch", {
@@ -13,82 +14,50 @@ sap.ui.define([
 		onInit: function () {
 			// Get  Model and set it to view
 			var oModel = this.getOwnerComponent().getModel();
-			oModel.setSizeLimit(1000000);
 			var oView = this.getView();
 			oView.setModel(oModel);
 			//initialize the table, items ="null" at start 
 			var oTable = this.getView().byId("flightsTable");
 			this.oBindingTable = oTable.getBindingInfo("items");
-			
 		},
 
 		onSearch: function () {
-			//the test subject used for coding
-			//var data = this.getView().getModel().oData["VooSet(CompanhiaAerea='AA',NumeroConexao='0017',DataVoo=datetime'2020-01-16T00%3A00%3A00')"];
 
-			//VARIABLES 
+			//VARIABLES
 			var oView = this.getView();
 			var oOrigin = oView.byId("originInput").getValue();
-			var oDestiny = oView.byId("destinationInput").getValue();
+			var oDestination = oView.byId("destinationInput").getValue();
 			var oDate = oView.byId("dateInput").getValue();
 			var oTable = this.getView().byId("flightsTable");
 			var sClasse = oView.byId("typeInput").getSelectedItem().getText();
 			var oColumnListItem = this.getView().byId("colunas");
 			var aFiltersForItems = [];
-			var aPaths = this._getFlightClass(sClasse);
+			var aPaths = this._getFlightClass(sClasse); // returns the paths of the corresponding flight class
 			
-			var sClasseKey = oView.byId("typeInput").getSelectedItem().getKey();
-			this.getOwnerComponent().getModel("reservaVooModel").setProperty("/ClasseVoo",sClasseKey);
+			if (this._isInputEmpty(oOrigin, oDestination, oDate)) {
+				var resourceBundle = this.getView().getModel("i18n").getResourceBundle();	
+				MessageToast.show(resourceBundle.getText("inputIsEmpty"));
+			}else{
+				
+				//saving the classe input key to a auxiliary model for further use
+				var sClasseKey = oView.byId("typeInput").getSelectedItem().getKey();
+				this.getOwnerComponent().getModel("reservaVooModel").setProperty("/ClasseVoo", sClasseKey);
+				this.getOwnerComponent().getModel("searchInputs").refresh(true);
+				oTable.getModel().refresh(true);
 			
-			
-
-			//refresh the table and the json model
-			this.getOwnerComponent().getModel("searchInputs").refresh(true); 
-			oTable.getModel().refresh(true); 
-
-			//push inputs to the array to serve as filter.
-	/*		aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
-			aFiltersForItems.push(new sap.ui.model.Filter("CidadeDestino", sap.ui.model.FilterOperator.EQ, oDestiny));
-			aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.EQ, oDate)); */
-
-			// insert the cell dinamically without predefined binding path's
-			oColumnListItem.insertCell(new sap.m.ObjectNumber({
-				number: {
-					parts: [{
-						path: aPaths[0]
-					}, {
-						path: aPaths[1]
-					}],
-					formatter: this.formatter.calcSeats                         
-				},
-				state: {
-					parts: [{
-						path: aPaths[0]
-					}, {
-						path: aPaths[1]
-					}],
-					formatter: this.formatter.availableSeatsStatus
+				//push inputs to the array to serve as filter.
+				/*		aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
+						aFiltersForItems.push(new sap.ui.model.Filter("CidadeDestino", sap.ui.model.FilterOperator.EQ, oDestiny));
+						aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.EQ, oDate)); */
+					
+				// insert the cell dinamically without predefined binding path's to change the displayed seats value by class
+				this._insertCell(oColumnListItem, aPaths[0], aPaths[1], 5);
+				this._bindToTable(oTable, aFiltersForItems);
+				this._toggleVisibility();
+				this._saveUserInputData(sClasse);
 				}
-			}), 5); // cell index 
-			//  Binding is done only when the button is pressed, at initialization items="" at table
-			
-			
-			oTable.bindItems({
-				path: "/VooSet",
-				template: this.oBindingTable.template,
-				templateShareable: true,
-				filters: aFiltersForItems
-			});
-			this._toggleVisibility();
-			this._saveUserInputData(sClasse);        
-			
 		},
 		
-		 
-		/* logic to get the paths 
-		 *corresponding to the oData, based on the user 
-		 *selection for the class of flight
-		 */
 		_getFlightClass: function (sInputClass) {
 			var aAux = [];
 			if (sInputClass === "Business Class") {
@@ -106,9 +75,46 @@ sap.ui.define([
 			}
 			return aAux;
 		},
-
-		/* change the visibility of the 
-		 *search panel and the table */
+		
+		_isInputEmpty: function (sInput1 ,sInput2, sInput3){
+			if(sInput1 === "" || sInput2 === "" || sInput3 === "") {
+				return true;
+			}else{
+				return false;
+			}
+		},
+		
+		_insertCell: function (oColumn, sPath1, sPath2, index) {
+			
+					oColumn.insertCell(new sap.m.ObjectNumber({
+				number: {
+					parts: [{
+						path: sPath1
+					}, {
+						path: sPath2
+					}],
+					formatter: this.formatter.calcSeats
+				},
+				state: {
+					parts: [{
+						path: sPath1
+					}, {
+						path: sPath2
+					}],
+					formatter: this.formatter.availableSeatsStatus
+				}
+			}), index);// cell index
+		},
+		
+		_bindToTable: function( oTable, aFilterByInputs){
+				oTable.bindItems({
+				path: "/VooSet",
+				template: this.oBindingTable.template,
+				templateShareable: true,
+				filters: aFilterByInputs
+			});
+		},
+		
 		_toggleVisibility: function () {
 			this._oTablePanel = this.byId("LazyLoadingTable");
 			this._oTablePanel.setVisible(true);
@@ -116,8 +122,13 @@ sap.ui.define([
 			this._oSearchPanel.setVisible(false);
 		},
 		
-		
-		onConfirmationRefresh : function() {
+		_saveUserInputData: function (sClasse) {
+			// save some data to the searchInputs model before navigation
+			var auxiliarModel = this.getOwnerComponent().getModel("searchInputs");
+			auxiliarModel.setProperty("/ClasseVoo", sClasse);
+		},
+
+		onConfirmationRefresh: function () {
 			this._oTablePanel = this.byId("LazyLoadingTable");
 			this._oTablePanel.setVisible(false);
 			this._oSearchPanel = this.byId("searchPanel");
@@ -125,8 +136,8 @@ sap.ui.define([
 			this._resetInputs();
 			this._getDialog().close();
 		},
-		
-		_resetInputs : function(){
+
+		_resetInputs: function () {
 			this._oView = this.getView();
 			this._oView.byId("originInput").setValue("");
 			this._oView.byId("destinationInput").setValue("");
@@ -135,18 +146,56 @@ sap.ui.define([
 		},
 		
 		onSwitch: function () {
+			/*Switch user input origin||destination*/
+			
 			this._oView = this.getView();
 			var oOrigin = this._oView.byId("originInput").getValue();
-			var oDestiny = this._oView.byId("destinationInput").getValue();
-			this._oView.byId("originInput").setValue(oDestiny);
+			var oDestination = this._oView.byId("destinationInput").getValue();
+			this._oView.byId("originInput").setValue(oDestination);
 			this._oView.byId("destinationInput").setValue(oOrigin);
 		},
-		
-		_saveUserInputData: function(sClasse) {
-			// save some data to the searchInputs model before navigation
+
+		onSelect: function (oEvent) {
+			/*When the user presses the desired flight */
+			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+
+			var oItem = oEvent.getSource();
+			var oContext = oItem.getBindingContext();
+
+			var CompanhiaAerea = oItem.getBindingContext().getProperty("CompanhiaAerea"); //AA
+			var NumeroConexao = oItem.getBindingContext().getProperty("NumeroConexao"); // 0017
+
+			//CALCULO TEMPORARIO DOS TOTAIS de lugares vazios
+			var sTotalLugaresEcon = oItem.getBindingContext().getProperty("TotalLugaresEcon");
+			var sLugaresOcupadosEcon = oItem.getBindingContext().getProperty("LugaresOcupadosEcon");
+			var sLugaresVaziosEcon = sTotalLugaresEcon - sLugaresOcupadosEcon;
+
+			var sTotalLugares1aClass = oItem.getBindingContext().getProperty("TotalLugares1aClass");
+			var sLugaresOcupados1aClass = oItem.getBindingContext().getProperty("LugaresOcupados1aClass");
+			var sLugaresVazios1aClass = sTotalLugares1aClass - sLugaresOcupados1aClass;
+
+			var sTotalLugaresBus = oItem.getBindingContext().getProperty("TotalLugaresBus");
+			var sLugaresOcupadosBus = oItem.getBindingContext().getProperty("LugaresOcupadosBus");
+			var sLugaresVaziosBus = sTotalLugaresBus - sLugaresOcupadosBus;
+
+			//set the values to the temporary model
 			var auxiliarModel = this.getOwnerComponent().getModel("searchInputs");
-			auxiliarModel.setProperty("/ClasseVoo",sClasse);
+			auxiliarModel.setProperty("/LugaresVaziosEcon", sLugaresVaziosEcon);
+			auxiliarModel.setProperty("/LugaresVazios1aClass", sLugaresVazios1aClass);
+			auxiliarModel.setProperty("/LugaresVaziosBus", sLugaresVaziosBus);
+
+			//auiliar para ir buscar a dataVoo
+			var aPath = oContext.sPath.split(",");
+			var aDatePath = aPath[2].split("=");
+			var sDataVoo = aDatePath[1].slice(0, -1);
+
+			oRouter.navTo("details", {
+				CompanhiaAerea: CompanhiaAerea,
+				NumeroConexao: NumeroConexao,
+				DataVoo: sDataVoo
+			});
+
 		}
-		
+
 	});
 });

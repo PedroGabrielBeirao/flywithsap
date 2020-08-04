@@ -43,12 +43,15 @@
 	"sap.ui5": {
 		"rootView": {
 			"viewName": "pt.procensus.FlyWithSapApp.view.App",
-			"type": "XML"
+			"type": "XML",
+			"async": true
 		},
 		"dependencies": {
 			"minUI5Version": "1.30.0",
 			"libs": {
-				"sap.ui.layout": {},
+				"sap.ui.layout": {
+					"lazy": true
+				},
 				"sap.ui.core": {},
 				"sap.m": {}
 			}
