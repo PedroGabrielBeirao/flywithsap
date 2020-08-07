@@ -44,11 +44,16 @@ sap.ui.define([
 		},
 
 		_bookButtonAble: function (iAvailableSeats) {
+	
 			var resourceBundle = this.getView().getModel("i18n").getResourceBundle();
 			var oBookButton = this.getView().byId("bookButton");
 			if (iAvailableSeats > 0) {
+				this.getView().byId("clienteSelect").setVisible(true);
+				this.getView().byId("customerIcon").setVisible(true);
 				oBookButton.setEnabled(true).setType("Emphasized").setText(resourceBundle.getText("ButtonReserve"));
 			} else {
+				this.getView().byId("clienteSelect").setVisible(false);
+				this.getView().byId("customerIcon").setVisible(false);
 				oBookButton.setEnabled(false).setType("Reject").setText(resourceBundle.getText("ButtonNotAvailable"));
 			}
 		},
@@ -59,19 +64,19 @@ sap.ui.define([
 
 			if (sInputClass === "Business Class") {
 				var availableSeatsBus = auxiliaryModel.getProperty("/LugaresVaziosBus");
-				var sState = formatter.availableSeatsStatus(availableSeatsBus);
+				var sState = formatter.availableSeatsStatusDetail(availableSeatsBus);
 				oView.byId("SeatsObjectHeader").setNumber(availableSeatsBus);
 				oView.byId("SeatsObjectHeader").setNumberState(sState);
 
 			} else if (sInputClass === "Economy Class") {
 				var availableSeatsEco = auxiliaryModel.getProperty("/LugaresVaziosEcon");
-				var sStateEco = formatter.availableSeatsStatus(availableSeatsEco);
+				var sStateEco = formatter.availableSeatsStatusDetail(availableSeatsEco);
 				oView.byId("SeatsObjectHeader").setNumber(availableSeatsEco);
 				oView.byId("SeatsObjectHeader").setNumberState(sStateEco);
 
 			} else if (sInputClass === "First Class") {
 				var availableSeats1aClass = auxiliaryModel.getProperty("/LugaresVaziosBus");
-				var sState1aClass = formatter.availableSeatsStatus(availableSeats1aClass);
+				var sState1aClass = formatter.availableSeatsStatusDetail(availableSeats1aClass);
 				oView.byId("SeatsObjectHeader").setNumber(availableSeats1aClass);
 				oView.byId("SeatsObjectHeader").setNumberState(sState1aClass);
 			}
@@ -85,7 +90,7 @@ sap.ui.define([
 
 		/* BOOK OPERATIONS*/
 		onBookButtonPress: function (oEvent) {
-		/* ReservaEntity STRUCTURE
+			/* ReservaEntity STRUCTURE
 			"CompanhiaAerea": "AA", "NumeroConexao": "0017",
     		"DataVoo": "/Date(1579132800000)/", "NumeroReserva": "00000002",
     		"CodigoCliente": "00003133", "ClasseVoo": "C", 
@@ -103,8 +108,8 @@ sap.ui.define([
 			var iNumeroConexao = oView.byId("detailsHeader").getObjectTitle();
 			var oDataVoo = oContext.getProperty("DataVoo");
 			var sFormatedDate = formatter._formatDate(oDataVoo);
-			
-		/*	var iCodigoCliente = oView.byId("clienteSelect").getSelectedKey();*/
+
+			/*	var iCodigoCliente = oView.byId("clienteSelect").getSelectedKey();*/
 			/* var classe de voo already set to the model */
 			var iValorPago = oView.byId("PriceObjectHeader").getNumber();
 			var iMoeda = oView.byId("PriceObjectHeader").getNumberUnit();
@@ -113,7 +118,7 @@ sap.ui.define([
 			oReservaModel.setProperty("/CompanhiaAerea", sCompanhiaAerea);
 			oReservaModel.setProperty("/NumeroConexao", iNumeroConexao);
 			oReservaModel.setProperty("/DataVoo", sFormatedDate);
-	/*		oReservaModel.setProperty("/CodigoCliente", iCodigoCliente);*/
+			/*		oReservaModel.setProperty("/CodigoCliente", iCodigoCliente);*/
 			/* var classe de voo already set to the model */
 			oReservaModel.setProperty("/ValorPago", iValorPago);
 			oReservaModel.setProperty("/Moeda", iMoeda);
@@ -123,6 +128,7 @@ sap.ui.define([
 			 **RESERVATION 
 			 **IN "ReservaSet" */
 			oReservaModel.refresh("true");
+			var that = this;
 			var oModelDB = this.getOwnerComponent().getModel();
 			var oReservaModelOdata = oReservaModel.oData;
 			MessageBox.confirm(resourceBundle.getText("BookMessage"), {
@@ -130,16 +136,23 @@ sap.ui.define([
 				emphasizedAction: MessageBox.Action.OK,
 				onClose: function (sButton) {
 					if (sButton === MessageBox.Action.OK) {
-						oModelDB.create("/ReservaSet", oReservaModelOdata);
-						MessageToast.show(resourceBundle.getText("BookConfirmed"));
+					//	oModelDB.create("/ReservaSet", oReservaModelOdata);
+						MessageToast.show(resourceBundle.getText("BookConfirmed"),{
+							duration: 3000
+						});
+						var oCustomerSelected = that.byId("clienteSelect").getValue();
+						that.byId("clienteSelect").setVisible(false);
+						that.byId("customerIcon").setVisible(false);
+						that.byId("bookButton").setEnabled(false)
+												.setText("Reservation Completed in name of " + " *" + oCustomerSelected + "*" )
+												.setType("Accept");
 					} else if (sButton === MessageBox.Action.CANCEL) {
 						MessageToast.show(resourceBundle.getText("BookCancel"));
 					}
 				}
 			});
-
 		},
-		
+
 		//valuehelp dialog methods for the choose client input
 		onValueHelpRequest: function () {
 			if (!this._oChooseClientDialog) {
@@ -150,32 +163,31 @@ sap.ui.define([
 				this._oChooseClientDialog.open();
 			}
 		},
-	
+
 		onValueHelpDialogClose: function (oEvent) {
 			var oReservaModel = this.getOwnerComponent().getModel("reservaVooModel");
-			
+
 			var oSelectedItem = oEvent.getParameter("selectedItem"),
 				oInput = this.byId("clienteSelect");
 
-			if (!oSelectedItem) {
-				oInput.resetProperty("value");
+			if (oSelectedItem === undefined) {
+				oInput.setValue(undefined);
 				return;
-			}
-			else{
-			var aux = oSelectedItem.getTitle();
-			oInput.setValue(aux);
-			var iCodigoClient = oSelectedItem.getDescription();
-			oReservaModel.setProperty("/CodigoCliente", iCodigoClient);
+			} else {
+				var aux = oSelectedItem.getTitle();
+				oInput.setValue(aux);
+				var iCodigoClient = oSelectedItem.getDescription();
+				oReservaModel.setProperty("/CodigoCliente", iCodigoClient);
 			}
 		},
-	
-			onSearch: function (oEvent) {
+
+		onSearch: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
 			var oFilter = new Filter("Nome", FilterOperator.Contains, sValue);
 			var oBinding = oEvent.getParameter("itemsBinding");
 			oBinding.filter([oFilter]);
-		},
-		
+		}
+
 	});
 
 });

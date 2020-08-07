@@ -9,6 +9,7 @@ xmlns:core="sap.ui.core"
 			growing="true"
 			growingThreshold="5"
 			growingScrollToLoad="false"
+			noDataText="{i18n>noDataTable}"
 			items="{
 					path:'' 
 			}"
@@ -21,6 +22,14 @@ xmlns:core="sap.ui.core"
 							textAlign="Begin" 
 							class="sapUiTinyMargin" 
 							level="H3"/>
+						<ToolbarSpacer width="" />
+						<Text id="tableHeaderOrigin"/>
+						<ToolbarSeparator />
+						<Text id="tableHeaderDestination"/>
+						<ToolbarSeparator />
+						<Text id= "tableHeaderDate"/>
+						<ToolbarSeparator />
+						<Text id="tableHeaderClass"/>
 				</OverflowToolbar>
 			</headerToolbar>
 			<columns>
@@ -48,6 +57,7 @@ xmlns:core="sap.ui.core"
 						<cells>
 							<ObjectIdentifier title="{CompanhiaAerea}" titleActive="false" visible="true"/>
 							<ObjectIdentifier
+								title = "{path: 'DataVoo', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}"
 								text="{path: 'HorarioPartida', 
 										type: 'sap.ui.model.odata.type.Time', 
 										formatOptions: { UTC: true, style: 'medium' }}" />
@@ -65,9 +75,7 @@ xmlns:core="sap.ui.core"
 								 />
 							<ObjectIdentifier 
 								 text="{Moeda}" />
-								 
 								<!--ObjectNumber Injected via the controller - index 5-->
-
 						</cells>
 					</ColumnListItem>
 				</items>

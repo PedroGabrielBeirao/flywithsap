@@ -42,7 +42,11 @@
 						}">
 						<core:Item key="{NomeCidade}" text="{NomeCidade}"/> 
 				</ComboBox>
-				<DatePicker id="dateInput" value="01,16,2020"/>
+			<!--	<DatePicker id="dateInput" value="01,16,2020"/>-->
+					<DateRangeSelection
+						id="dateInput"
+						displayFormat="MM/dd/yyyy"
+						change="handleDateInput"/>
 				<!-- "C" equals Business Class -->
 				<Select id="typeInput"   
 						forceSelection="false"

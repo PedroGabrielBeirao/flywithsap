@@ -14,6 +14,7 @@
 			}
 		}">
 		<StandardListItem
+			id="selectedCustomer"
 			selected="false"
 			title="{Nome}"
 			description="{Codigo}"

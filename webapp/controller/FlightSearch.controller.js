@@ -2,10 +2,13 @@ sap.ui.define([
 	"pt/procensus/FlyWithSapApp/controller/BaseController",
 	"../model/formatter",
 	"sap/m/MessageToast",
+	"sap/ui/core/library",
 	"sap/ui/core/Fragment",
 	"sap/ui/core/UIComponent"
-], function (BaseController, formatter, MessageToast, Fragment, UIComponent) {
+], function (BaseController, formatter, MessageToast, CoreLibrary, Fragment, UIComponent) {
 	"use strict";
+
+	var ValueState = CoreLibrary.ValueState;
 
 	return BaseController.extend("pt.procensus.FlyWithSapApp.controller.FlightSearch", {
 
@@ -19,22 +22,50 @@ sap.ui.define([
 			//initialize the table, items ="null" at start 
 			var oTable = this.getView().byId("flightsTable");
 			this.oBindingTable = oTable.getBindingInfo("items");
+		
 		},
+		
+		handleDateInput: function (oEvent) {
+	
+			var oDateFrom = oEvent.getParameter("from"); //from Date
+			var oDateTo = oEvent.getParameter("to"); //to Date
+			var bValid = oEvent.getParameter("valid");
+			var	oEventSource = oEvent.getSource();
+			
+			if (bValid) {
+				oEventSource.setValueState(ValueState.None);
+				var oTemporaryDateModel = this.getOwnerComponent().getModel("temporaryDate");
+				oTemporaryDateModel.setProperty("/from", oDateFrom);
+				oTemporaryDateModel.setProperty("/to", oDateTo);
+			} else {
+				oEventSource.setValue("");
+				oEventSource.setValueState(ValueState.Error);
+			}
+		},
+		
 
 		onSearch: function () {
-
+			
 			//VARIABLES
 			var oView = this.getView();
+			
+			var oTemporaryDateModel = this.getOwnerComponent().getModel("temporaryDate");
+			
+			var oDateFrom = oTemporaryDateModel.getProperty("/from"); 
+			var oDateTo = oTemporaryDateModel.getProperty("/to"); 
+	
+			
 			var oOrigin = oView.byId("originInput").getValue();
 			var oDestination = oView.byId("destinationInput").getValue();
-			var oDate = oView.byId("dateInput").getValue();
+			
+			var oDateInput = oView.byId("dateInput").getValue();
 			var oTable = this.getView().byId("flightsTable");
 			var sClasse = oView.byId("typeInput").getSelectedItem().getText();
 			var oColumnListItem = this.getView().byId("colunas");
 			var aFiltersForItems = [];
 			var aPaths = this._getFlightClass(sClasse); // returns the paths of the corresponding flight class
 			
-			if (this._isInputEmpty(oOrigin, oDestination, oDate)) {
+			if (this._isInputEmpty(oOrigin, oDestination, oDateInput)) {
 				var resourceBundle = this.getView().getModel("i18n").getResourceBundle();	
 				MessageToast.show(resourceBundle.getText("inputIsEmpty"));
 			}else{
@@ -46,12 +77,17 @@ sap.ui.define([
 				oTable.getModel().refresh(true);
 			
 				//push inputs to the array to serve as filter.
-				/*		aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
-						aFiltersForItems.push(new sap.ui.model.Filter("CidadeDestino", sap.ui.model.FilterOperator.EQ, oDestiny));
-						aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.EQ, oDate)); */
+			/*	aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
+				aFiltersForItems.push(new sap.ui.model.Filter("CidadeDestino", sap.ui.model.FilterOperator.EQ, oDestination));*/
+				if( oDateTo === null){
+						aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.EQ, oDateFrom)); 
+				}else{
+					aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.BT, oDateFrom, oDateTo)); 
+				}
 					
 				// insert the cell dinamically without predefined binding path's to change the displayed seats value by class
 				this._insertCell(oColumnListItem, aPaths[0], aPaths[1], 5);
+				this.addTableHeaderInfo( oOrigin, oDestination, oDateInput, sClasse);
 				this._bindToTable(oTable, aFiltersForItems);
 				this._toggleVisibility();
 				this._saveUserInputData(sClasse);
@@ -106,13 +142,21 @@ sap.ui.define([
 			}), index);// cell index
 		},
 		
+		addTableHeaderInfo: function (origin,destination,date,classe){
+			var oView = this.getView();
+			oView.byId("tableHeaderOrigin").setText(origin);
+			oView.byId("tableHeaderDestination").setText(destination);
+			oView.byId("tableHeaderDate").setText(date);
+			oView.byId("tableHeaderClass").setText(classe);
+		},
+		
 		_bindToTable: function( oTable, aFilterByInputs){
 				oTable.bindItems({
 				path: "/VooSet",
 				template: this.oBindingTable.template,
 				templateShareable: true,
 				filters: aFilterByInputs
-			});
+			});        
 		},
 		
 		_toggleVisibility: function () {
@@ -157,6 +201,7 @@ sap.ui.define([
 
 		onSelect: function (oEvent) {
 			/*When the user presses the desired flight */
+			
 			var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 
 			var oItem = oEvent.getSource();
@@ -194,7 +239,7 @@ sap.ui.define([
 				NumeroConexao: NumeroConexao,
 				DataVoo: sDataVoo
 			});
-
+			
 		}
 
 	});

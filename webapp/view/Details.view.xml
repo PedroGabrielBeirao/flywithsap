@@ -9,40 +9,7 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 <uxap:ObjectPageLayout id="detailsLayout"  
 	showTitleInHeaderContent="true" 
 	showAnchorBar="false" 
-	enableLazyLoading="true"> 
-
-<!-- DETAIL HEADER SECTION -->
-		<uxap:headerContent>
-			<layout:VerticalLayout width="33.33%"/>
-			<layout:VerticalLayout width="33.33%"/>
-			<layout:VerticalLayout width="33.33%"/>
-			<layout:VerticalLayout width="33.33%"/>
-			<layout:VerticalLayout width="33.33%"/>
-			<layout:VerticalLayout>
-			<HBox fitContainer="true" width="auto" alignItems="Center" direction="Row"	justifyContent="Start">
-				<items>
-					<Text text="{i18n>ReservationName}"></Text>
-					<Input 
-						id="clienteSelect"
-						type="Text"
-						placeholder="Choose Client..."
-						showValueHelp="true"
-						valueHelpOnly="true"
-						valueHelpRequest="onValueHelpRequest"
-						class="sapUiSmallMarginBottom"
-						width="10rem"
-					/>
-				<!--	<Select id="clienteSelect"  width= "10rem" items="{
-							path: '/ClienteSet',
-							sorter: { path: 'Nome' }
-						}">
-					<core:Item key="{Codigo}" text="{Nome}" />
-				</Select>-->
-				</items>
-			</HBox>
-		</layout:VerticalLayout>
-		
-</uxap:headerContent>
+	enableLazyLoading="true">
 	<uxap:headerTitle id = "detailsHeaderTitle Section">
 			<uxap:ObjectPageHeader id="detailsHeader"
 				objectImageURI="sap-icon://tags"
@@ -61,7 +28,6 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 				</uxap:actions>
 			</uxap:ObjectPageHeader>
 		</uxap:headerTitle> 
-		
 <!-- SECTIONS -->
 <uxap:sections id="sections">
 	<!-- first section FROM -->
@@ -88,7 +54,7 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 									</VBox>
 									<VBox width="33.3%" alignItems="Center" direction="Column" justifyContent="End">
 										<items>
-											<Title id="dataVoo" text="{path: 'DataVoo', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'short' }}"
+											<Title id="dataVoo" text="{path: 'DataVoo', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true, style: 'medium' }}"
 											textAlign="Begin" class="sapUiSmallMargin" titleStyle="H3"/>
 										</items>
 									</VBox>
@@ -191,12 +157,31 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 															<DisplayListItem label="{i18n>listDaysAfter}" value="{DiasApos}" type="Inactive"/>
 															<DisplayListItem label="{i18n>listPrice}" value="{PrecoVoo}" type="Inactive" />
 															<DisplayListItem label="{i18n>listUnit}" value="{Moeda}"  type="Inactive" selected="false"/>
+															<DisplayListItem label="Duration" value="{
+																				parts: [ 
+																					{path:'DataVoo'},
+																					{path: 'DiasApos'},
+																					{path: 'HorarioPartida'},
+																					{path: 'HorarioChegada'}
+																						],
+																							formatter:'.formatter.calcTime'
+																				}" />
 														</items>
 													</List>
 <!--BUTTONS -->
 													<Toolbar>
 														<content>
-															<ToolbarSpacer width=""/>
+															<ToolbarSpacer id="tbSpacer" width=""/>
+															<core:Icon id="customerIcon" src="sap-icon://customer"></core:Icon>
+																<Input 
+																	id="clienteSelect"
+																	type="Text"
+																	placeholder="Choose Client..."
+																	showValueHelp="true"
+																	valueHelpOnly="true"
+																	valueHelpRequest="onValueHelpRequest"
+																	width="15rem"
+																/>
 															<Button id="bookButton" text="{i18n>ButtonReserve}" type="Emphasized" press="onBookButtonPress"/>
 															</content>
 													</Toolbar>
@@ -208,7 +193,6 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 					</uxap:ObjectPageSubSection>
 				</uxap:subSections>
 			</uxap:ObjectPageSection>
-
 </uxap:sections>
 </uxap:ObjectPageLayout>
 </mvc:View>
