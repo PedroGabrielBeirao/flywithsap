@@ -63,7 +63,6 @@ sap.ui.define([
 			var departureTime = new Date(departureDate).getTime();
 			var arrivalDay = departureDay.setDate(departureDay.getDate() + iDaysAfter);
 			var arrivalTime = new Date(arrivalDay).getTime();
-	
 			var iArrivalHour;
 			var iDepartureHour;
 			if(arrivalHour === null){
@@ -77,20 +76,16 @@ sap.ui.define([
 			}else{
 				iDepartureHour = departureHour.ms;
 			}
-			
 			var resultingDepartureTime = departureTime + iDepartureHour;
 			var resultingArrivalTime = arrivalTime + iArrivalHour;
 			var durationMs = resultingArrivalTime - resultingDepartureTime;
 			var durationHours = (0.001 / 3600) * durationMs;
 			//convert the value
 			var iHours = Math.floor(durationHours);
-			
 			var minutes = (durationHours - iHours) * 60;
 			var iMinutes = Math.round(minutes);
-			
 			//finally return the duration of the flight
 			return iHours + " " + "h" + " " + iMinutes + " " + "min";
-			
 		},
 		
 		

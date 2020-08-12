@@ -3,7 +3,7 @@
 	xmlns:core="sap.ui.core"
 	controllerName="pt.procensus.FlyWithSapApp.controller.FlightSearch">
 	 
-	 <Image src="images/googleVoos.svg" width="100%" tooltip="{i18>googleVoosDescription}"/>
+	 <Image src="{imageModel>/path}/googleVoos.svg"  width="100%" tooltip="{i18>googleVoosDescription}"/>
 
 <!--PANEL - CUSTOMER SEARCH INPUT PANEL-->
 	<Panel id="searchPanel" backgroundDesign="Transparent">

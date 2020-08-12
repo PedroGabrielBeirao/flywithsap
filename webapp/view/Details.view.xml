@@ -5,7 +5,6 @@ xmlns:uxap="sap.uxap"
 xmlns:layout="sap.ui.layout"
 controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 >
-
 <uxap:ObjectPageLayout id="detailsLayout"  
 	showTitleInHeaderContent="true" 
 	showAnchorBar="false" 
@@ -155,8 +154,6 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 																			formatOptions: { UTC: true, style: 'medium' }}"  
 															type="Inactive" selected="false"/>
 															<DisplayListItem label="{i18n>listDaysAfter}" value="{DiasApos}" type="Inactive"/>
-															<DisplayListItem label="{i18n>listPrice}" value="{PrecoVoo}" type="Inactive" />
-															<DisplayListItem label="{i18n>listUnit}" value="{Moeda}"  type="Inactive" selected="false"/>
 															<DisplayListItem label="Duration" value="{
 																				parts: [ 
 																					{path:'DataVoo'},
@@ -166,6 +163,8 @@ controllerName="pt.procensus.FlyWithSapApp.controller.Details"
 																						],
 																							formatter:'.formatter.calcTime'
 																				}" />
+															<DisplayListItem label="{i18n>listPrice}" value="{PrecoVoo}" type="Inactive" />
+															<DisplayListItem label="{i18n>listUnit}" value="{Moeda}"  type="Inactive" selected="false"/>
 														</items>
 													</List>
 <!--BUTTONS -->

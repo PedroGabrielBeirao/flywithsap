@@ -20,6 +20,15 @@ sap.ui.define([
 
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
+			
+			//load the images
+			var imagesRoot = jQuery.sap.getModulePath("pt.procensus.FlyWithSapApp.images");
+			var oImageModel = new sap.ui.model.json.JSONModel({
+			path : imagesRoot
+			});
+			this.setModel(oImageModel, "imageModel");
+			
+			
 		}
 	});
 });

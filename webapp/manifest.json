@@ -38,7 +38,10 @@
 			"tablet": true,
 			"phone": true
 		},
-		"supportedThemes": ["sap_hcb", "sap_bluecrystal"]
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_bluecrystal"
+		]
 	},
 	"sap.ui5": {
 		"rootView": {
@@ -49,11 +52,11 @@
 		"dependencies": {
 			"minUI5Version": "1.30.0",
 			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {},
 				"sap.ui.layout": {
 					"lazy": true
-				},
-				"sap.ui.core": {},
-				"sap.m": {}
+				}
 			}
 		},
 		"contentDensities": {
@@ -99,9 +102,11 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -116,19 +121,23 @@
 					"target": "notFound"
 				}
 			},
-			"routes": [{
-				"name": "home",
-				"pattern": "",
-				"target": "home"
-			}, {
-				"pattern": "details/{CompanhiaAerea},{NumeroConexao},{DataVoo}",
-				"name": "details",
-				"target": "details"
-			}, {
-				"name": "createUser",
-				"pattern": "createUser",
-				"target": "createUser"
-			}],
+			"routes": [
+				{
+					"name": "home",
+					"pattern": "",
+					"target": "home"
+				},
+				{
+					"pattern": "details/{CompanhiaAerea},{NumeroConexao},{DataVoo}",
+					"name": "details",
+					"target": "details"
+				},
+				{
+					"name": "createUser",
+					"pattern": "createUser",
+					"target": "createUser"
+				}
+			],
 			"targets": {
 				"home": {
 					"viewType": "XML",
@@ -160,6 +169,10 @@
 	},
 	"sap.platform.hcp": {
 		"uri": "webapp",
+		"_version": "1.1.0"
+	},
+	"sap.platform.abap": {
+		"uri": "/sap/bc/ui5_ui5/sap/zflights/webapp",
 		"_version": "1.1.0"
 	}
 }

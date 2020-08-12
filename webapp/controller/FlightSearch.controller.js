@@ -15,6 +15,7 @@ sap.ui.define([
 		formatter: formatter,
 
 		onInit: function () {
+			
 			// Get  Model and set it to view
 			var oModel = this.getOwnerComponent().getModel();
 			var oView = this.getView();
@@ -43,7 +44,6 @@ sap.ui.define([
 			}
 		},
 		
-
 		onSearch: function () {
 			
 			//VARIABLES
@@ -77,8 +77,8 @@ sap.ui.define([
 				oTable.getModel().refresh(true);
 			
 				//push inputs to the array to serve as filter.
-			/*	aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
-				aFiltersForItems.push(new sap.ui.model.Filter("CidadeDestino", sap.ui.model.FilterOperator.EQ, oDestination));*/
+				aFiltersForItems.push(new sap.ui.model.Filter("CidadeOrigem", sap.ui.model.FilterOperator.EQ, oOrigin));
+				aFiltersForItems.push(new sap.ui.model.Filter("CidadeDestino", sap.ui.model.FilterOperator.EQ, oDestination));
 				if( oDateTo === null){
 						aFiltersForItems.push(new sap.ui.model.Filter("DataVoo", sap.ui.model.FilterOperator.EQ, oDateFrom)); 
 				}else{
@@ -239,8 +239,6 @@ sap.ui.define([
 				NumeroConexao: NumeroConexao,
 				DataVoo: sDataVoo
 			});
-			
 		}
-
 	});
 });
